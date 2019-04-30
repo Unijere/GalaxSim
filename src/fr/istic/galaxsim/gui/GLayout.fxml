@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.canvas.Canvas?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.event.*?>
+<?import javafx.scene.input.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.paint.Paint?>
+<?import javafx.scene.Group?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+
+<AnchorPane fx:controller="fr.istic.galaxsim.gui.GLayout"
+ xmlns:fx="http://javafx.com/fxml/1"
+ fx:id="layout">
+	<HBox >	<!-- base -->
+		
+		<VBox spacing = "10">	<!-- formulaire -->
+		<padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+		
+			
+			<!-- chaque StackPane représente une option -->
+			
+			
+			<StackPane fx:id="option1" ><!--  option1 -->
+				<Rectangle fx:id="option1Case" height = "80" width = "500" fill = "transparent" stroke = "black"/>
+				<Label >option 1</Label>
+				<!--cool à utilisé pour entrée des données
+				
+				<TextField fx:id = "nbInputField" prefWidth = "2" visible = "false"></TextField>
+				<Button fx:id = "nbInputBtn" translateX = "30" visible = "false" > ok </Button>
+				-->
+			</StackPane>
+			
+			 <StackPane  ><!--  option2 -->
+				<Rectangle  height = "80" width = "500" fill = "transparent" stroke = "black"/>
+				<Label >option 2</Label>
+			</StackPane>
+			
+			<StackPane  ><!--  option3 -->
+				<Rectangle  height = "80" width = "500" fill = "transparent" stroke = "black"/>
+				<Label >option 3</Label>
+			</StackPane>
+			
+			<StackPane  ><!--  option4 -->
+				<Rectangle  height = "80" width = "500" fill = "transparent" stroke = "black"/>
+				<Label >option 4</Label>
+			</StackPane>
+			
+			<StackPane  ><!--  option5 -->
+				<Rectangle  height = "80" width = "500" fill = "transparent" stroke = "black"/>
+				<Label >option 5</Label>
+			</StackPane>
+			
+			<StackPane  ><!--  option6 -->
+				<Rectangle  height = "80" width = "500" fill = "transparent" stroke = "black"/>
+				<Label >option 6</Label>
+			</StackPane>
+			
+			
+		</VBox>
+		
+		<!-- zone de visualisation -->
+		<ScrollPane pannable="true" fx:id = "scrollPane" prefHeight="800.0" prefWidth="1200.0" 
+		BorderPane.alignment="CENTER" >
+			<content >
+			
+				<StackPane>
+					
+					<Canvas   height = "775.0" width = "1175.0"/>
+					
+					<Group    >
+					
+						
+					
+					</Group>
+					
+				</StackPane>
+			
+				
+			</content>
+		</ScrollPane>
+	
+	
+	</HBox>
+	
+	
+	<!-- TODO Add Nodes -->
+</AnchorPane>
+
