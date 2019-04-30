@@ -1,8 +1,8 @@
 package fr.istic.galaxsim.gui;
 
 import javafx.scene.PerspectiveCamera;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Translate;
 import javafx.stage.Stage;
@@ -10,8 +10,8 @@ import javafx.stage.Stage;
 /**
  * Camera libre permettant de changer sa position et son angle de vue
  *
- * Touches A et Z : deplacement en avant ou en arriere
- * Maintient du clique droit : deplacement lateral de la vue sur l'axe des X
+ * Molette : deplacement en avant ou en arriere sur l'axe Z
+ * Maintient du clique droit : deplacement lateral de la vue sur l'axe X
  * Maintient du clique molette : changement de l'angle de vue sur les axes X et Y
  */
 public class FreeCamera extends PerspectiveCamera {
@@ -69,15 +69,9 @@ public class FreeCamera extends PerspectiveCamera {
 
         });
 
-        // Deplacement en avant ou en arriere a l'aide des touches Z et S
-        stage.addEventHandler(KeyEvent.KEY_RELEASED, event -> {
-            switch(event.getCode()) {
-                case Z:
-                    moveForward(moveSpeed);
-                    break;
-                case S:
-                    moveBackward(moveSpeed);
-            }
+        stage.addEventHandler(ScrollEvent.ANY, event -> {
+            double amount = (event.getDeltaY() < 0.0) ? -moveSpeed : moveSpeed;
+            moveOnZ(amount);
         });
     }
 
@@ -85,12 +79,8 @@ public class FreeCamera extends PerspectiveCamera {
         return moveSpeed;
     }
 
-    public void moveBackward(double distance) {
-        camTranslate.setZ(camTranslate.getZ() - distance);
-    }
-
-    public void moveForward(double distance) {
-        moveBackward(-distance);
+    public void moveOnZ(double amount) {
+        camTranslate.setZ(camTranslate.getZ() + amount);
     }
 
     /**
