@@ -86,6 +86,19 @@ public class FileDatas {
 	}
 	
 	/**
+	 * methode permettant de retourner le bloc suivant du fichier (en conservant les espaces)
+	 * @return le bloc suivante du fichier
+	 */
+	public String nextOriginalBloc(){
+		if (reader.hasNext()){
+			
+			String bloc = reader.next();
+			return bloc; 
+		}
+		return null;
+	}
+	
+	/**
 	 * methode permettant de retourner la ligne suivante du fichier
 	 * @return la ligne suivante du fichier
 	 */
@@ -106,6 +119,18 @@ public class FileDatas {
 		return null;
 	}
 	
+	
+	/**
+	 * methode permettant de retourner la ligne suivante du fichier (en conservant les espaces)
+	 * @return la ligne suivante du fichier
+	 */
+	public String nextOriginalLine(){
+		if (reader.hasNext()){
+			String line = reader.nextLine();
+			return line;
+		}
+		return null;
+	}
 	
 	/**
 	 * methode permettant de retourner le mot suivant du fichier

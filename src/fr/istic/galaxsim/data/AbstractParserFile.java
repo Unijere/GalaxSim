@@ -10,10 +10,12 @@ public abstract class AbstractParserFile {
 	/**
 	 * code de recuperation de type de donnees
 	 * 0 : mots par mots
-	 * 1 : ligne par ligne
-	 * 2 : bloc par bloc
+	 * 1 : ligne par ligne (un espace entre chaque mot)
+	 * 2 : ligne par ligne (espaces originals)
+	 * 3 : bloc par bloc (un espace entre chaque mot)
+	 * 4 : bloc par bloc (espaces originals)
 	 */
-	public static final int DATAS_WORD = 0, DATAS_LINE = 1, DATAS_BLOC = 2;
+	public static final int DATAS_WORD = 0, DATAS_LINE = 1, DATAS_ORIGINAL_LINE = 2,  DATAS_BLOC = 3, DATAS_ORIGINAL_BLOC = 4;
 	
 	/**
 	 * le fichier
@@ -76,8 +78,12 @@ public abstract class AbstractParserFile {
 			return file.nextWord();
 		case DATAS_LINE :
 			return file.nextLine();
+		case DATAS_ORIGINAL_LINE :
+			return file.nextOriginalLine();
 		case DATAS_BLOC :
 			return file.nextBloc();
+		case DATAS_ORIGINAL_BLOC :
+			return file.nextOriginalBloc();
 		default : 
 			System.out.println("ERROR CODE DATAS");
 		}

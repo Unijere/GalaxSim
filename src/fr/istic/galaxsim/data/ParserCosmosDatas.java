@@ -12,23 +12,18 @@ public abstract class ParserCosmosDatas extends AbstractParserFile{
 	 * les donnees
 	 */
 	private ArrayList<String[]> allDatas = new ArrayList<String[]>();
-	
+		
 	/**
-	 * la taille maximale d'une donnee
+	 * la taille final des donnees apres recuperation
 	 */
-	private int sizeMaxDatas = 0;
-	
-	/**
-	 * la taille minimale d'une données
-	 */
-	private int sizeMinDatas = 100;
+	private int sizeFinal = 0;
 	
 	/**
 	 * constructeurs
 	 * @param pathFile le chemin du fichier
 	 */
 	public ParserCosmosDatas(String pathFile) {
-		super(pathFile);
+		super(pathFile, AbstractParserFile.DATAS_ORIGINAL_LINE);
 	}
 	
 	/**
@@ -37,42 +32,44 @@ public abstract class ParserCosmosDatas extends AbstractParserFile{
 	 * @param sizeMin la taille min des données
 	 * @param sizeMax la taille max des données
 	 */
-	public ParserCosmosDatas(String pathFile, int sizeMin, int sizeMax) {
-		super(pathFile);
-		this.setSizeDatas(sizeMin, sizeMax);
+	public ParserCosmosDatas(String pathFile, int sizeFinal) {
+		super(pathFile, AbstractParserFile.DATAS_ORIGINAL_LINE);
+		this.sizeFinal = sizeFinal;
 	}
 	
-	/**
-	 * constructeurs
-	 * @param pathFile le chemin du fichier
-	 * @param le code de donnees
-	 */
-	public ParserCosmosDatas(String pathFile, int codeDatas) {
-		super(pathFile, codeDatas);
-	}
-	
-	/**
-	 * constructeurs
-	 * @param pathFile le chemin du fichier
-	 * @param le code de donnees
-	 * @param sizeMin la taille min des données
-	 * @param sizeMax la taille max des données
-	 */
-	public ParserCosmosDatas(String pathFile, int codeDatas, int sizeMin, int sizeMax) {
-		super(pathFile, codeDatas);
-		this.setSizeDatas(sizeMin, sizeMax);
-	}
 
 	@Override
 	public void executeAction(String datas) {
-		String[] arrayDatas = datas.split(" ");
+		Scanner sc = new Scanner(datas);
 		
-		if (arrayDatas.length <= this.sizeMaxDatas && arrayDatas.length >= this.sizeMinDatas){
-			String[] importantDatas = this.extractImportantDatas(arrayDatas); 
-			if (importantDatas != null && importantDatas.length > 0){
-				this.allDatas.add(importantDatas);
+		int indice = 0;
+		String data = "";
+		String[] importantDatas = getEmptyDatas();
+		boolean correct = true;
+		
+		while (correct && indice < datas.length()){
+			if (datas.charAt(indice) != ' '){
+				data = sc.next();
+				indice += data.length();
+				if (this.isCorrectData(data, indice)){
+					if (this.isImportantData(data, indice)){
+						int indiceFinalTable = this.getFinalIndiceData(indice);
+						if (indiceFinalTable >= 0 && indiceFinalTable<sizeFinal) {
+							importantDatas[indiceFinalTable] = data;
+						}
+					}
+				} else {
+					correct = false;
+				}
+			} else {
+				indice ++;
 			}
 		}
+		
+		if (correct){
+			this.allDatas.add(importantDatas);
+		}
+		sc.close();
 	}
 	
 	
@@ -84,7 +81,7 @@ public abstract class ParserCosmosDatas extends AbstractParserFile{
 	public String[][] getAllDatas(){
 		if (this.allDatas.size() > 0){
 			int size = this.allDatas.size();
-			String[][] d = new String[size][sizeMaxDatas];
+			String[][] d = new String[size][sizeFinal];
 			for (int i = 0; i<size; i++){
 				d[i] = this.allDatas.get(i);
 			}
@@ -94,23 +91,15 @@ public abstract class ParserCosmosDatas extends AbstractParserFile{
 	}
 	
 	/**
-	 * methode permettant d'extraire que ce qui est important des données
-	 * @param datas les données
-	 * @return ce qui est important des données
+	 * methode permettant d'optenir un tableau de données vide
+	 * @return un tableau de données vide
 	 */
-	private String[] extractImportantDatas(String[] datas){
-		ArrayList<String> listDatas = new ArrayList<String>();
+	private String[] getEmptyDatas(){
+		String[] datas = new String[sizeFinal];
 		for (int i = 0; i<datas.length; i++){
-			String d = datas[i];
-			if (this.isCorrectData(d, i)){
-				if (this.isImportantData(d, i)){
-					listDatas.add(d);
-				}
-			} else {
-				return null;
-			}
+			datas[i] = null;
 		}
-		return listDatas.toArray(new String[listDatas.size()]);
+		return datas;
 	}
 	
 	/**
@@ -129,12 +118,9 @@ public abstract class ParserCosmosDatas extends AbstractParserFile{
 	public abstract boolean isImportantData(String data, int indice);
 	
 	/**
-	 * methode permettant de modifier la taille min et max des données
-	 * @param min la taille min 
-	 * @param max la taille max
+	 * methode permettant d'obtenir l'indice de la donnée dans le tableau final
+	 * @param indice l'indice de la donnée dans le fichier
+	 * @return l'indice de la donnée dans le tableau final
 	 */
-	public void setSizeDatas(int min, int max){
-		this.sizeMinDatas = min;
-		this.sizeMaxDatas = max;
-	}
+	public abstract int getFinalIndiceData(int indice);
 }
