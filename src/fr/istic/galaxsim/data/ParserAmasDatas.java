@@ -12,27 +12,60 @@ public class ParserAmasDatas extends ParserCosmosDatas{
 	 * @param pathFile le chemin du fichier
 	 */
 	public ParserAmasDatas(String pathFile) {
-		super(pathFile);
+		super(pathFile, 9);
 	}
-
-	/**
-	 * constructeur
-	 * @param pathFile le chemin du fichier
-	 * @param sizeMin la taille min des données
-	 * @param sizeMax la taille max des données
-	 */
-	public ParserAmasDatas(String pathFile, int sizeMin, int sizeMax) {
-		super(pathFile, sizeMin, sizeMax);
-	}
-
+	
 	/**
 	 * methode permettant de verifier que la donnee est correcte
 	 * @param data la donnee
 	 */
 	@Override
 	public boolean isCorrectData(String data, int indice) {
-		// TODO Auto-generated method stub
-		// à completer
+		switch (indice){
+		case 6 : 
+			if (CheckData.isInteger(data)){
+				int i = Integer.parseInt(data);
+				return (i >= 100001 && i <= 400002) || i == 0;
+			}
+			return false;
+			
+		case 27 :
+			if (CheckData.isDouble(data)){
+				double d = Double.parseDouble(data);
+				return (d >= 0 && d <= 494.3);
+			}
+			return false;
+			
+		case 33 : 
+			return true;
+			
+		case 62 : 
+			return CheckData.isDouble(data);
+			
+		case 69 :
+			return CheckData.isDouble(data);
+			
+		case 78 :
+			return CheckData.isDouble(data);
+			
+		case 87 : 
+			return CheckData.isDouble(data);
+			
+		case 125 : 
+			if (CheckData.isDouble(data)){
+				double d = Double.parseDouble(data);
+				return (d >= -189 && d <= 29883);
+			}
+			return false;
+			
+		case 168 : 
+			if (CheckData.isDouble(data)){
+				double d = Double.parseDouble(data);
+				return (d >= 0 && d <= 24401);
+			}
+			return false;
+		}
+		
 		return true;
 	}
 
@@ -44,9 +77,38 @@ public class ParserAmasDatas extends ParserCosmosDatas{
 	 */
 	@Override
 	public boolean isImportantData(String data, int indice) {
-		// TODO Auto-generated method stub
-		// à completer
-		return true;
+		return (indice == 6 || indice == 27 || indice == 33 || indice == 62 || indice == 69 || indice == 78
+				|| indice == 87 || indice == 125 || indice == 168) ;
+	}
+
+	/**
+	 * methode permettant d'obtenir l'indice de la donnée dans le tableau final
+	 * @param indice l'indice de la donnée dans le fichier
+	 * @return l'indice de la donnée dans le tableau final
+	 */
+	@Override
+	public int getFinalIndiceData(int indice) {
+		switch (indice){
+		case 6 : 
+			return 0;
+		case 27 :
+			return 2;
+		case 33 : 
+			return 1;
+		case 62 : 
+			return 3;
+		case 69 :
+			return 4;
+		case 78 :
+			return 5;
+		case 87 : 
+			return 6 ;
+		case 125 : 
+			return 7 ;
+		case 168 : 
+			return 8;
+		}
+		return -1;
 	}
 
 
