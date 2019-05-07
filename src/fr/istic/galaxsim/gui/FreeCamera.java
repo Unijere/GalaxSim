@@ -1,5 +1,6 @@
 package fr.istic.galaxsim.gui;
 
+import javafx.scene.Node;
 import javafx.scene.PerspectiveCamera;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
@@ -27,11 +28,11 @@ public class FreeCamera extends PerspectiveCamera {
     private double lastMouseClickPosX;
     private double lastMouseClickPosY;
 
-    public FreeCamera(Stage stage) {
-        this(stage, false);
+    public FreeCamera(Node parent) {
+        this(parent, false);
     }
 
-    public FreeCamera(Stage stage, boolean fixedEyeAtCameraZero) {
+    public FreeCamera(Node parent, boolean fixedEyeAtCameraZero) {
         super(fixedEyeAtCameraZero);
 
         moveSpeed = DEFAULT_MOVE_SPEED;
@@ -41,7 +42,7 @@ public class FreeCamera extends PerspectiveCamera {
         /* Sauvegarde des coordonnees de la souris lorsque le bouton droit
         ou le clique molette est active afin de calculer le deplacement de
         la camera */
-        stage.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
+        parent.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
             if(event.isSecondaryButtonDown() || event.isMiddleButtonDown()) {
                 lastMouseClickPosX = event.getSceneX();
                 lastMouseClickPosY = event.getSceneY();
@@ -50,7 +51,7 @@ public class FreeCamera extends PerspectiveCamera {
 
         /* Deplacement de la camera a l'aide du clique droit ou du clique
         molette */
-        stage.addEventHandler(MouseEvent.MOUSE_DRAGGED, event -> {
+        parent.addEventHandler(MouseEvent.MOUSE_DRAGGED, event -> {
             double mouseDeltaX = event.getSceneX() - lastMouseClickPosX;
             double mouseDeltaY = event.getSceneY() - lastMouseClickPosY;
 
@@ -69,7 +70,7 @@ public class FreeCamera extends PerspectiveCamera {
 
         });
 
-        stage.addEventHandler(ScrollEvent.ANY, event -> {
+        parent.addEventHandler(ScrollEvent.ANY, event -> {
             double amount = (event.getDeltaY() < 0.0) ? -moveSpeed : moveSpeed;
             moveOnZ(amount);
         });
