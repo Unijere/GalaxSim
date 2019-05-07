@@ -147,10 +147,11 @@ public class FileDatas {
 	 * méthode qui permet de fermer le fichier
 	 */
 	public void closeFile(){
-		reader.close();
-		reader = null;
+		if (reader != null){
+			reader.close();
+			reader = null;	
+		}
 	}
-
 
 	/**
 	 * méthode qui permet de savoir si le fichier est ouvert

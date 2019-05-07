@@ -24,6 +24,7 @@ public abstract class ParserCosmosDatas extends AbstractParserFile{
 	 */
 	public ParserCosmosDatas(String pathFile) {
 		super(pathFile, AbstractParserFile.DATAS_ORIGINAL_LINE);
+		InfoParser.addParser(this);
 	}
 	
 	/**
@@ -35,6 +36,7 @@ public abstract class ParserCosmosDatas extends AbstractParserFile{
 	public ParserCosmosDatas(String pathFile, int sizeFinal) {
 		super(pathFile, AbstractParserFile.DATAS_ORIGINAL_LINE);
 		this.sizeFinal = sizeFinal;
+		InfoParser.addParser(this);
 	}
 	
 
@@ -68,6 +70,8 @@ public abstract class ParserCosmosDatas extends AbstractParserFile{
 		
 		if (correct){
 			this.allDatas.add(importantDatas);
+		} else {
+			this.printErrorData();
 		}
 		sc.close();
 	}
