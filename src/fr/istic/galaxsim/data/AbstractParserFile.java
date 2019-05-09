@@ -1,11 +1,13 @@
 package fr.istic.galaxsim.data;
 
+import java.util.Observable;
+
 /**
  * classe abstraite de parser de fichier
  * @author anaofind
  *
  */
-public abstract class AbstractParserFile {
+public abstract class AbstractParserFile extends Observable{
 	
 	/**
 	 * code de recuperation de type de donnees
@@ -33,6 +35,12 @@ public abstract class AbstractParserFile {
 	private String pathFile;
 	
 	/**
+	 * le numero de la donnée en cours d'analyse
+	 */
+	private int numDataParsing = 0;
+	
+	
+	/**
 	 * constructeur
 	 * @param pathFile le chemin du fichier
 	 */
@@ -56,16 +64,53 @@ public abstract class AbstractParserFile {
 	 * methode permettant de parser le fichier
 	 */
 	public void toParse(){
+		
 		file.openFile();
+		numDataParsing = 0;
+		this.update();
+		
 		if (file.isOpen()){
-			String data  = getNextDatasFile(); 
+			String data  = getNextDatasFile();
 			while (data != null){
+				numDataParsing ++;
+				this.update();
 				executeAction(data);
 				data = getNextDatasFile();
 			}
 		}
 		
 		file.closeFile();
+		this.update();
+	}
+	
+	/**
+	 * methode permettant de parser le fichier en donnant le nombre de données suivantes à traiter
+	 */
+	public void toParse(int nbDatas){
+		int nb = 0;
+		
+		if (! file.isOpen()){
+			file.openFile();
+			numDataParsing = 0;
+			this.update();
+		}
+	
+		if (file.isOpen() && nb < nbDatas){
+			String data  = getNextDatasFile(); 
+			while (data != null && nb < nbDatas){
+				numDataParsing ++;
+				this.update();
+				executeAction(data);
+				nb++;
+				if (nb < nbDatas){
+					data = getNextDatasFile();
+				}
+			}
+			if (data == null){
+				file.closeFile();
+				this.update();
+			}
+		}
 	}
 	
 	/**
@@ -102,5 +147,78 @@ public abstract class AbstractParserFile {
 	 */
 	public void setSeparatorBloc(String separatorBloc){
 		this.file = new FileDatas(this.pathFile, separatorBloc);
+	}
+	
+	/**
+	 * methode permettant d'obtenir le numero de la données courrante
+	 * @return le numero de la donnée courrante
+	 */
+	public int getNumDataParsing(){
+		return this.numDataParsing;
+	}
+	
+	/**
+	 * méthode permettant de savoir le status de l'analyse
+	 * @return le status de l'analyse
+	 */
+	private String getStatus(){
+		String typeDatas = this.getTypeDatas();
+		if (file.isOpen()){
+			if (this.numDataParsing == 0){
+				return "Début";
+			} else {
+				return typeDatas + " en cours d'analyse : " + this.numDataParsing;
+			}
+		}
+		
+		return "Fin";
+	}
+	
+	/**
+	 * methode permettant d'afficher un message
+	 * @param message
+	 */
+	private void printMessage(String message){
+		System.out.println("fichier (" + this.pathFile + ") -> " + message);
+	}
+	
+	/**
+	 * methode permettant d'afficher l'erreur de la donnée courrante
+	 */
+	public void printErrorData(){
+		this.printMessage("Erreur : " + this.numDataParsing);
+	}
+	
+	/**
+	 * methode permettant d'afficher le status du parser
+	 */
+	public void printStatus(){
+		this.printMessage(getStatus());
+	}
+	
+	/**
+	 * methode permettant d'obtenir le String correspondant au type de donnée
+	 * @return le type de données
+	 */
+	private String getTypeDatas(){
+		switch (codeDatas){
+		case DATAS_WORD: 
+			return "mot";
+		case DATAS_LINE: 
+		case DATAS_ORIGINAL_LINE: 
+			return "ligne";
+		case DATAS_BLOC:
+		case DATAS_ORIGINAL_BLOC:
+			return "bloc";
+		}
+		return "donnée";
+	}
+	
+	/**
+	 * methode permettant d'avertir les observers que le parser à été mis à jour
+	 */
+	public void update(){
+		this.setChanged();
+		this.notifyObservers();
 	}
 }
