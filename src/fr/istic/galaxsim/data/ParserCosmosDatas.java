@@ -24,19 +24,15 @@ public abstract class ParserCosmosDatas extends AbstractParserFile{
 	 */
 	public ParserCosmosDatas(String pathFile) {
 		super(pathFile, AbstractParserFile.DATAS_ORIGINAL_LINE);
-		InfoParser.addParser(this);
 	}
 	
 	/**
 	 * constructeurs
 	 * @param pathFile le chemin du fichier
-	 * @param sizeMin la taille min des données
-	 * @param sizeMax la taille max des données
 	 */
 	public ParserCosmosDatas(String pathFile, int sizeFinal) {
 		super(pathFile, AbstractParserFile.DATAS_ORIGINAL_LINE);
 		this.sizeFinal = sizeFinal;
-		InfoParser.addParser(this);
 	}
 	
 
@@ -71,7 +67,7 @@ public abstract class ParserCosmosDatas extends AbstractParserFile{
 		if (correct){
 			this.allDatas.add(importantDatas);
 		} else {
-			this.printErrorData();
+			//this.printErrorData();
 		}
 		sc.close();
 	}
@@ -109,14 +105,14 @@ public abstract class ParserCosmosDatas extends AbstractParserFile{
 	/**
 	 * methode permettant de verifier que la donnee est correcte
 	 * @param data la donnee
-	 * @param l'indice de la donnée
+	 * @param indice de la donnée
 	 */
 	public abstract boolean isCorrectData(String data, int indice);
 	
 	/**
 	 * methode permettant de savoir si la donnee est interressante
 	 * @param data la donnee
-	 * @param l'indice de la donnée
+	 * @param indice de la donnée
 	 * @return boolean indiquant si la donnee est interressante
 	 */
 	public abstract boolean isImportantData(String data, int indice);

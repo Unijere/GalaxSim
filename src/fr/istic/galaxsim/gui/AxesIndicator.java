@@ -21,29 +21,30 @@ public class AxesIndicator extends Group {
         Rotate zRotate = new Rotate(-90, Rotate.X_AXIS);
 
         // Creation des cylindres representant chaque axe
-        Cylinder xAxis = new Cylinder(0.8f, 20f);
-        xAxis.getTransforms().add(xRotate);
+        Cylinder xAxis = new Cylinder(0.8f, 10f);
+        xAxis.getTransforms().addAll(new Translate(xAxis.getHeight() / 2, 0, 0), xRotate);
         xAxis.setMaterial(materialX);
 
-        Cylinder yAxis = new Cylinder(0.8f, 20f);
+        Cylinder yAxis = new Cylinder(0.8f, 10f);
         yAxis.setMaterial(materialY);
+        yAxis.setTranslateY(yAxis.getTranslateY() - yAxis.getHeight() / 2);
 
-        Cylinder zAxis = new Cylinder(0.8f, 20f);
-        zAxis.getTransforms().add(zRotate);
+        Cylinder zAxis = new Cylinder(0.8f, 10f);
+        zAxis.getTransforms().addAll(new Translate(0, 0, zAxis.getHeight() / 2), zRotate);
         zAxis.setMaterial(materialZ);
 
         // Un cone est ajoute au bout de chaque cylindre pour representer la direction de l'axe
-        ConeMesh coneX = new ConeMesh(0.8f, 1.5f);
+        ConeMesh coneX = new ConeMesh(1f, 1.5f);
         coneX.setMaterial(materialX);
-        coneX.getTransforms().addAll(new Translate(xAxis.getHeight() / 2 + coneX.getHeight(), 0, 0), xRotate);
+        coneX.getTransforms().addAll(new Translate(xAxis.getHeight() + coneX.getHeight(), 0, 0), xRotate);
 
-        ConeMesh coneY = new ConeMesh(0.8f, 1.5f);
+        ConeMesh coneY = new ConeMesh(1f, 1.5f);
         coneY.setMaterial(materialY);
-        coneY.getTransforms().add(new Translate(0, -yAxis.getHeight() / 2 - coneY.getHeight(), 0));
+        coneY.getTransforms().add(new Translate(0, -yAxis.getHeight() - coneY.getHeight(), 0));
 
-        ConeMesh coneZ = new ConeMesh(0.8f, 1.5f);
+        ConeMesh coneZ = new ConeMesh(1f, 1.5f);
         coneZ.setMaterial(materialZ);
-        coneZ.getTransforms().addAll(new Translate(0, 0, zAxis.getHeight() / 2 + coneZ.getHeight()), zRotate);
+        coneZ.getTransforms().addAll(new Translate(0, 0, zAxis.getHeight() + coneZ.getHeight()), zRotate);
 
         getChildren().addAll(xAxis, yAxis, zAxis, coneX, coneY, coneZ);
         getTransforms().add(new Scale(scale, scale, scale));

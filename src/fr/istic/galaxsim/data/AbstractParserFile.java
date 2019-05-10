@@ -1,13 +1,14 @@
 package fr.istic.galaxsim.data;
 
-import java.util.Observable;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 
 /**
  * classe abstraite de parser de fichier
  * @author anaofind
  *
  */
-public abstract class AbstractParserFile extends Observable{
+public abstract class AbstractParserFile {
 	
 	/**
 	 * code de recuperation de type de donnees
@@ -33,12 +34,9 @@ public abstract class AbstractParserFile extends Observable{
 	 * le chemin du fichier
 	 */
 	private String pathFile;
-	
-	/**
-	 * le numero de la donnée en cours d'analyse
-	 */
-	private int numDataParsing = 0;
-	
+
+
+	private IntegerProperty bytesReadProperty = new SimpleIntegerProperty();
 	
 	/**
 	 * constructeur
@@ -66,21 +64,19 @@ public abstract class AbstractParserFile extends Observable{
 	public void toParse(){
 		
 		file.openFile();
-		numDataParsing = 0;
-		this.update();
+		bytesReadProperty.set(0);
 		
 		if (file.isOpen()){
 			String data  = getNextDatasFile();
 			while (data != null){
-				numDataParsing ++;
-				this.update();
+				//numDataProperty.increaseValue();
 				executeAction(data);
+				bytesReadProperty.set(file.getBytesRead());
 				data = getNextDatasFile();
 			}
 		}
 		
 		file.closeFile();
-		this.update();
 	}
 	
 	/**
@@ -91,16 +87,15 @@ public abstract class AbstractParserFile extends Observable{
 		
 		if (! file.isOpen()){
 			file.openFile();
-			numDataParsing = 0;
-			this.update();
+			bytesReadProperty.set(0);
 		}
 	
 		if (file.isOpen() && nb < nbDatas){
 			String data  = getNextDatasFile(); 
 			while (data != null && nb < nbDatas){
-				numDataParsing ++;
-				this.update();
+				//numDataProperty.increaseValue();
 				executeAction(data);
+				bytesReadProperty.set(file.getBytesRead());
 				nb++;
 				if (nb < nbDatas){
 					data = getNextDatasFile();
@@ -108,7 +103,6 @@ public abstract class AbstractParserFile extends Observable{
 			}
 			if (data == null){
 				file.closeFile();
-				this.update();
 			}
 		}
 	}
@@ -136,89 +130,17 @@ public abstract class AbstractParserFile extends Observable{
 	}
 	
 	/**
-	 * methode abstraite permettant d'excecuter une action pour une ligne lu
-	 * @param line la ligne lu
+	 * methode abstraite permettant d'excecuter une action pour une ligne lue
+	 * @param line la ligne lue
 	 */
 	public abstract void executeAction(String line);
 	
-	/**
-	 * methode permettant de changer le separateur de bloc
-	 * @param separatorBloc le separateur de bloc
-	 */
-	public void setSeparatorBloc(String separatorBloc){
-		this.file = new FileDatas(this.pathFile, separatorBloc);
+	public IntegerProperty getBytesReadProperty() {
+		return bytesReadProperty;
 	}
-	
-	/**
-	 * methode permettant d'obtenir le numero de la données courrante
-	 * @return le numero de la donnée courrante
-	 */
-	public int getNumDataParsing(){
-		return this.numDataParsing;
+
+	public long getFileLength() {
+		return file.getFileLength();
 	}
-	
-	/**
-	 * méthode permettant de savoir le status de l'analyse
-	 * @return le status de l'analyse
-	 */
-	private String getStatus(){
-		String typeDatas = this.getTypeDatas();
-		if (file.isOpen()){
-			if (this.numDataParsing == 0){
-				return "Début";
-			} else {
-				return typeDatas + " en cours d'analyse : " + this.numDataParsing;
-			}
-		}
-		
-		return "Fin";
-	}
-	
-	/**
-	 * methode permettant d'afficher un message
-	 * @param message
-	 */
-	private void printMessage(String message){
-		System.out.println("fichier (" + this.pathFile + ") -> " + message);
-	}
-	
-	/**
-	 * methode permettant d'afficher l'erreur de la donnée courrante
-	 */
-	public void printErrorData(){
-		this.printMessage("Erreur : " + this.numDataParsing);
-	}
-	
-	/**
-	 * methode permettant d'afficher le status du parser
-	 */
-	public void printStatus(){
-		this.printMessage(getStatus());
-	}
-	
-	/**
-	 * methode permettant d'obtenir le String correspondant au type de donnée
-	 * @return le type de données
-	 */
-	private String getTypeDatas(){
-		switch (codeDatas){
-		case DATAS_WORD: 
-			return "mot";
-		case DATAS_LINE: 
-		case DATAS_ORIGINAL_LINE: 
-			return "ligne";
-		case DATAS_BLOC:
-		case DATAS_ORIGINAL_BLOC:
-			return "bloc";
-		}
-		return "donnée";
-	}
-	
-	/**
-	 * methode permettant d'avertir les observers que le parser à été mis à jour
-	 */
-	public void update(){
-		this.setChanged();
-		this.notifyObservers();
-	}
+
 }

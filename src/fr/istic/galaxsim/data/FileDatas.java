@@ -26,6 +26,10 @@ public class FileDatas {
 	 * separateur de block
 	 */
 	private String separatorBloc = "\n";
+
+	private int bytesRead = 0;
+
+	private long fileLength = 0;
 	
 	/**
 	 * constructeur
@@ -127,6 +131,7 @@ public class FileDatas {
 	public String nextOriginalLine(){
 		if (reader.hasNext()){
 			String line = reader.nextLine();
+			bytesRead += line.length();
 			return line;
 		}
 		return null;
@@ -176,6 +181,7 @@ public class FileDatas {
 	 */
 	private void initReader(){
 		File file = new File(this.pathFile);
+		fileLength = file.length();
 		try {
 			this.reader = new Scanner(file);
 			this.reader.useDelimiter("\\s*" + this.separatorBloc + "\\s*");
@@ -183,5 +189,13 @@ public class FileDatas {
 			// TODO Auto-generated catch block
 			System.out.println(e);
 		}
+	}
+
+	public int getBytesRead() {
+		return bytesRead;
+	}
+
+	public long getFileLength() {
+		return fileLength;
 	}
 }
