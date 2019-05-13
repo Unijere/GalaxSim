@@ -83,7 +83,8 @@ public class View extends Application {
 		  }
 		}
 		
-		mylayout.addSpace(space.getSpace());
+		mylayout.addSpace(space);
+		space.play();
 		
 		
 		 

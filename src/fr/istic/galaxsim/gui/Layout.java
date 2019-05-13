@@ -1,12 +1,16 @@
 package fr.istic.galaxsim.gui;
 
 import java.util.ArrayList;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Slider;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
@@ -24,6 +28,9 @@ public class Layout {
 	@FXML private StackPane stackPane;
 	@FXML private VBox formPanel;
 	
+	private Space3D space;
+	private Slider slider;
+	
 	
 	public Layout(){
 		
@@ -32,6 +39,58 @@ public class Layout {
 	
 	@FXML
     public void initialize() {
+		
+		
+
+		/*
+		 * 
+		 * Gestion du slider du temps 
+		 * 
+		 */
+		int min=0;
+		int max;
+		try{
+			max = space.getTransitions().get(0).getPath().getSize();
+		}catch(Exception e){
+			max = 100;
+		}
+		
+		double value = 0;
+		
+		
+		Slider slider = new Slider(min, max, value);
+		this.slider = slider;
+		this.addFormOption(slider);
+		
+		
+		
+		
+		/*
+		 * timer pour actualiser le slider
+		 */
+		final Runnable task = new Runnable() {
+            
+	        @Override
+	        public void run() {
+	            System.out.println(slider.getValue());
+	            int max;
+	            try{
+	    			max = space.getTransitions().get(0).getPath().getSize();
+	    			slider.setValue(space.getTransitions().get(0).getPath().getCurrentTarget());
+	    		}catch(Exception e){
+	    			max = 100;
+	    		}
+	            slider.setMax(max);
+	            
+	            
+	        }
+	    };
+	         
+	    final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
+	        executor.scheduleAtFixedRate(task, 0, 1, TimeUnit.SECONDS);
+	        
+	        
+	        
 		
 		
 	}
@@ -76,18 +135,13 @@ public class Layout {
 	}
 
 
-	public void addSpace(Group space) {
-		space.setOnScroll((EventHandler<? super ScrollEvent>) event ->{
+	public void addSpace(Space3D space) {
+		space.getSpace().setOnScroll((EventHandler<? super ScrollEvent>) event ->{
 			canvasZoom(event);
 		});
-		this.stackPane.getChildren().add(space);
+		this.stackPane.getChildren().add(space.getSpace());
 		
-		
-		
-		
-		
-		
-		
+		this.space = space;
 		
 	}
 	

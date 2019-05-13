@@ -1,5 +1,6 @@
 package fr.istic.galaxsim.gui;
 
+import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
 import javafx.geometry.Point3D;
@@ -9,18 +10,18 @@ import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
 import javafx.scene.shape.DrawMode;
 import javafx.scene.shape.Sphere;
-import sample.Path3D;
-import sample.Path3DTransition;
+import javafx.util.Duration;
 
 public class Space3D {
 	private Group space = new Group();
-	
+	private ArrayList<Path3DTransition> transitions = new ArrayList<Path3DTransition>();
 	
 	
 	public Space3D(){
+		/*
 		Box box = new Box(50, 50, 50);
 		box.setDrawMode(DrawMode.LINE);
-		space.getChildren().add(box);
+		space.getChildren().add(box);*/
 		
 		//pour que l'écran ne s'adapte pas aux positions des spheres
 		space.setManaged(false);
@@ -30,7 +31,7 @@ public class Space3D {
 	}
 	public void addGalaxy(Galaxy g){
 		Sphere s1 = new Sphere(5);
-        Color c = Color.AZURE;
+        Color c = Color.RED;
         s1.setMaterial(new PhongMaterial(c));
         s1.setTranslateX(g.getCoordonnees().x);
         s1.setTranslateY(g.getCoordonnees().y);
@@ -47,13 +48,27 @@ public class Space3D {
         }
 
         Path3DTransition trans = new Path3DTransition(s1, path, 100);
-        trans.play();
         
-        
-        
-        
-        
+        this.transitions.add(trans);
+           
 	}
+	
+	public ArrayList<Path3DTransition> getTransitions(){
+		return this.transitions;
+	}
+	
+	public void play(){
+		for(Path3DTransition pt : this.transitions){
+			pt.play();
+		}
+	}
+	
+	public void play(Duration time){
+		for(Path3DTransition pt : this.transitions){
+			pt.playFrom(time);
+		}
+	}
+	
 	
 	
 	public Group getSpace(){
