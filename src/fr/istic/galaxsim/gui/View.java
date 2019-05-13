@@ -1,5 +1,9 @@
 package fr.istic.galaxsim.gui;
 
+import java.io.File;
+import java.util.ArrayList;
+
+import fr.istic.galaxsim.serialization.Serialization;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
@@ -8,7 +12,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.shape.Box;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.DrawMode;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -47,6 +53,7 @@ public class View extends Application {
 		
 		
 		fillOption(mylayout);
+		fillView(mylayout);
 		
 		
 		
@@ -63,6 +70,25 @@ public class View extends Application {
 	}
 	
 	
+	private void fillView(Layout mylayout) {
+		Space3D space = new Space3D();
+		
+		File folder = new File("data");
+		File[] listOfFiles = folder.listFiles();
+
+		for (int i = 0; i < listOfFiles.length; i++) {
+		  if (listOfFiles[i].isFile()) {
+			  System.out.println(listOfFiles[i].getName());
+		    space.addGalaxy(Galaxy.deserialize(listOfFiles[i].getName()));
+		  }
+		}
+		
+		mylayout.addSpace(space.getSpace());
+		
+		
+		 
+	}
+
 	public void fillOption(Layout mylayout){
 		mylayout.addFormOption(new Rectangle(50,82));
 		TextField t = new TextField("info");
