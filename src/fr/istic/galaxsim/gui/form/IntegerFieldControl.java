@@ -2,24 +2,16 @@ package fr.istic.galaxsim.gui.form;
 
 import javafx.scene.control.TextField;
 
-public class IntegerFieldControl {
+import java.util.Optional;
+
+public class IntegerFieldControl extends FieldControl {
 
     private final TextField field;
-    private boolean hasHigherBound;
-    private boolean hasLowerBound;
-    private int lowBound;
-    private int highBound;
+    private Optional<Integer> lowBound;
+    private Optional<Integer> highBound;
 
     public IntegerFieldControl(TextField field) {
-        this(field, 0, 0);
-        hasBounds = false;
-    }
-
-    public IntegerFieldControl(TextField field, int lowBound, int hightBound) {
         this.field = field;
-        this.lowBound = lowBound;
-        this.highBound = hightBound;
-        this.hasBounds = true;
 
         // Seuls les chiffres sont acceptes, les autres sont effaces
         field.textProperty().addListener((obs, oldValue, newValue) -> {
@@ -27,12 +19,19 @@ public class IntegerFieldControl {
         });
     }
 
+    public IntegerFieldControl(TextField field, int lowBound, int hightBound) {
+        this(field);
+
+        setHighBound(hightBound);
+        setLowBound(lowBound);
+    }
+
     public int getHighBound() {
-        return highBound;
+        return highBound.get();
     }
 
     public int getLowBound() {
-        return lowBound;
+        return lowBound.get();
     }
 
     /**
@@ -53,15 +52,15 @@ public class IntegerFieldControl {
     public boolean isValid() {
         int value = getValue();
 
-        return value >= lowBound && value < highBound;
+        return (lowBound.isPresent() && value >= getLowBound()) && (highBound.isPresent() && value < getHighBound());
     }
 
-    public void setHighBound(int highBound) {
-        this.highBound = highBound;
+    public void setHighBound(int value) {
+        highBound = Optional.of(value);
     }
 
-    public void setLowBound(int lowBound) {
-        this.lowBound = lowBound;
+    public void setLowBound(int value) {
+        lowBound = Optional.of(value);
     }
 
 }
