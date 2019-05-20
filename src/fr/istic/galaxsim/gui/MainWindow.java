@@ -3,6 +3,7 @@ package fr.istic.galaxsim.gui;
 import fr.istic.galaxsim.data.ParserAmasDatas;
 import fr.istic.galaxsim.data.ParserCosmosDatas;
 import fr.istic.galaxsim.data.ParserGalaxiesDatas;
+import fr.istic.galaxsim.gui.form.IntegerFieldControl;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
@@ -15,7 +16,7 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Translate;
 import javafx.stage.FileChooser;
@@ -27,20 +28,23 @@ public class MainWindow {
 	@FXML
 	private TextField dataFileField;
 	@FXML
-	private Pane pane3D;
+	private StackPane pane3D;
 	@FXML
 	private ChoiceBox<String> dataTypeField;
 	@FXML
     private Label infoLabel;
 	@FXML
     private ProgressBar progressBar;
+	@FXML
+    private TextField distanceField;
+    @FXML
+	private GalaxyInfos galaxyInfos;
 
 	private File currentDataFile;
 	
 	public MainWindow(){
 		currentDataFile = null;
-
-	}
+    }
 	
 	@FXML
     public void initialize() {
@@ -49,6 +53,8 @@ public class MainWindow {
 
         // La barre de chargement est uniquement affichee lorsque des donnees sont traitees
         progressBar.setManaged(false);
+
+        //IntegerFieldControl control = new IntegerFieldControl(distanceField);
 
 		Group sceneRoot = new Group();
 
