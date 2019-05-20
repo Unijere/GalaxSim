@@ -12,8 +12,8 @@ import javafx.scene.transform.Translate;
 public class Universe extends Group {
 
     private Translate translate = new Translate();
-    public Rotate rotateX = new Rotate(-20, Rotate.X_AXIS);
-    public Rotate rotateY = new Rotate(0, Rotate.Y_AXIS);
+    public Rotate rotateX = new Rotate(20, Rotate.X_AXIS);
+    public Rotate rotateY = new Rotate(45, Rotate.Y_AXIS);
 
     private double lastMouseClickPosX;
     private double lastMouseClickPosY;

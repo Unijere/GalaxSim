@@ -70,7 +70,7 @@ public class MainWindow {
 
 		// Declaration de la camera
 		PerspectiveCamera camera = new PerspectiveCamera(true);
-		camera.setTranslateZ(-200);
+		camera.setTranslateZ(-250);
 		camera.setFarClip(5000);
 		camera.setNearClip(1);
 
@@ -83,6 +83,14 @@ public class MainWindow {
 
         sceneRoot.getChildren().addAll(universe, axes);
 		pane3D.getChildren().addAll(simScene);
+
+		// Positionnement du panneau en bas a droite de la fenetre
+        galaxyInfos.widthProperty().addListener((obs, oldValue, newValue) -> {
+            galaxyInfos.setTranslateX((pane3D.getWidth() - galaxyInfos.getWidth()) / 2 - 7);
+        });
+        galaxyInfos.heightProperty().addListener((obs, oldValue, newValue) -> {
+            galaxyInfos.setTranslateY((pane3D.getHeight() - galaxyInfos.getHeight()) / 2 - 7);
+        });
 	}
 
 	@FXML

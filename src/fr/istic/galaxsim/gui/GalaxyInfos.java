@@ -2,7 +2,6 @@ package fr.istic.galaxsim.gui;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.input.MouseDragEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -16,9 +15,6 @@ public class GalaxyInfos extends VBox {
     private GridPane pane;
     @FXML
     private HBox controlBar;
-
-    private double lastMouseClickPosX;
-    private double lastMouseClickPosY;
 
     public GalaxyInfos() {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("GalaxyInfos.fxml"));
@@ -37,6 +33,10 @@ public class GalaxyInfos extends VBox {
         setViewOrder(-1.0);
     }
 
+    public void setGalaxy() {
+        // @TODO en attente de la classe Galaxy
+    }
+
     @FXML
     private void hidePane(MouseEvent event) {
         setVisible(false);
@@ -45,15 +45,9 @@ public class GalaxyInfos extends VBox {
     @FXML
     private void movePane(MouseEvent event) {
         if(event.isPrimaryButtonDown()) {
-            setTranslateX(event.getSceneX() - lastMouseClickPosX);
-            setTranslateY(event.getSceneY() - lastMouseClickPosY);
+            setTranslateX(getTranslateX() + event.getX() - getWidth() / 2);
+            setTranslateY(getTranslateY() + event.getY());
         }
-    }
-
-    @FXML
-    private void updateMousePos(MouseEvent event) {
-        lastMouseClickPosX = event.getSceneX();
-        lastMouseClickPosY = event.getSceneY();
     }
 
 }
