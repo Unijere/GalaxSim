@@ -47,10 +47,10 @@ public class Layout {
 		 * Gestion du slider du temps 
 		 * 
 		 */
-		int min=0;
-		int max;
+		double min=0;
+		double max;
 		try{
-			max = space.getTransitions().get(0).getPath().getSize();
+			max =  space.getTransitions().get(0).getTotalDuration().toSeconds();
 		}catch(Exception e){
 			max = 100;
 		}
@@ -59,6 +59,12 @@ public class Layout {
 		
 		
 		Slider slider = new Slider(min, max, value);
+		
+		slider.setOnMouseClicked((MouseEvent h) ->{
+			space.play(slider.getValue());
+			
+			
+				});
 		this.slider = slider;
 		this.addFormOption(slider);
 		
@@ -72,11 +78,10 @@ public class Layout {
             
 	        @Override
 	        public void run() {
-	            System.out.println(slider.getValue());
-	            int max;
+	            double max;
 	            try{
-	    			max = space.getTransitions().get(0).getPath().getSize();
-	    			slider.setValue(space.getTransitions().get(0).getPath().getCurrentTarget());
+	    			max = space.getTransitions().get(0).getTotalDuration().toSeconds();
+	    			slider.setValue(space.getTransitions().get(0).getCurrentTime().toSeconds());
 	    		}catch(Exception e){
 	    			max = 100;
 	    		}

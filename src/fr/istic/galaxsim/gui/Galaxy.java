@@ -107,7 +107,7 @@ public class Galaxy implements Serializable{
 		
 		Galaxy g2 = new Galaxy("g2");
 		g2.setCurrentCoordonnees(new Coordonnees(25, 12, 2));
-		g2.setCurrentVitesse( new Vitesse (8,-5,-2));
+		g2.setCurrentVitesse( new Vitesse (8,-25,-5));
 		for(int i=1;i<200;i++){
 			g2.addFuturCoordonnee(new Coordonnees(
 					(g2.getCoordonnees(i-1).x+g2.getVitesse().x) ,

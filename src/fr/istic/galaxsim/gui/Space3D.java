@@ -41,13 +41,13 @@ public class Space3D {
         
         
         Path3D path = new Path3D(g.getCoordonnees().getPoint3D());
-        for(int j = 0;j < g.getNbCoordonnesFuture();j++) {
+        for(int j = 1;j < g.getNbCoordonnesFuture();j++) {
             Point3D p2;
             p2 = g.getCoordonnees(j).getPoint3D();
             path.addTarget(p2);
         }
 
-        Path3DTransition trans = new Path3DTransition(s1, path, 100);
+        Path3DTransition trans = new Path3DTransition(s1, path, 10);
         
         this.transitions.add(trans);
            
@@ -63,9 +63,20 @@ public class Space3D {
 		}
 	}
 	
-	public void play(Duration time){
+	public void play(double d){
+		
 		for(Path3DTransition pt : this.transitions){
-			pt.playFrom(time);
+			//pt.stop();
+		}
+		
+		for(Path3DTransition pt : this.transitions){
+			pt.playFrom(Duration.seconds(d));
+			pt.getPath().setNext(d/pt.getTotalDuration().toSeconds());
+			
+		}
+		for(Path3DTransition pt : this.transitions){
+			//pt.play();
+			
 		}
 	}
 	

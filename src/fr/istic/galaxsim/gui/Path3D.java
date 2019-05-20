@@ -34,7 +34,10 @@ public class Path3D {
     }
 
     public Point3D getTarget() {
+    	
+    	
         return targets.get(currentTargetPos);
+        
     }
 
     public double getTotalDistance() {
@@ -81,5 +84,10 @@ public class Path3D {
     public int getCurrentTarget(){
     	return this.currentTargetPos;
     }
+
+	public void setNext(double d) {
+		currentTargetPos = (int) (d * this.targets.size());
+		
+	}
 
 }

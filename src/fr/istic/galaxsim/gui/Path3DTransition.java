@@ -26,10 +26,10 @@ public class Path3DTransition extends Transition {
         this.duration = duration;
 
         this.totalDistance = path.getTotalDistance();
+        
         this.moveSpeed = totalDistance / duration;
-
         setInterpolator(Interpolator.LINEAR);
-        setCycleDuration(Duration.INDEFINITE);
+        setCycleDuration(Duration.seconds(duration));
 
         lastDistance = path.getStartPoint().distance(path.getTarget());
     }
@@ -40,27 +40,34 @@ public class Path3DTransition extends Transition {
 
     @Override
     protected void interpolate(double v) {
-        double d = getCurrentShapePosition().distance(path.getTarget()) - 0.01;
-        if(lastDistance > d) {
-            Point3D direction = path.getDirection(getCurrentShapePosition());
-            direction.multiply(moveSpeed);
-            path.getStartPoint().add(direction);
+    	if(path.hasMoreTargets(reverse)){
+    		
+    		double d = getCurrentShapePosition().distance(path.getTarget()) - 0.01;
+            
+            if(lastDistance > d) {
+                Point3D direction = path.getDirection(getCurrentShapePosition());
+                
+                direction = direction.multiply(d);
+                path.getStartPoint().add(direction);
 
-            shape.setTranslateX(shape.getTranslateX() + direction.getX());
-            shape.setTranslateY(shape.getTranslateY() + direction.getY());
-            shape.setTranslateZ(shape.getTranslateZ() + direction.getZ());
-            lastDistance = d;
-        }
-        else {
-            if(path.hasMoreTargets(reverse)) {
-                path.nextTarget(reverse);
+                shape.setTranslateX(shape.getTranslateX() + direction.getX());
+                shape.setTranslateY(shape.getTranslateY() + direction.getY());
+                shape.setTranslateZ(shape.getTranslateZ() + direction.getZ());
+                lastDistance = d;
             }
             else {
-                reverse = !reverse;
-                path.nextTarget(reverse);
+                if(path.hasMoreTargets(reverse)) {
+                    path.nextTarget(reverse);
+                }
+                else {
+                    //reverse = !reverse;
+                    path.nextTarget(reverse);
+                }
+                lastDistance = getCurrentShapePosition().distance(path.getTarget());
             }
-            lastDistance = getCurrentShapePosition().distance(path.getTarget());
-        }
+    		
+    	}
+        
 
     }
 
