@@ -1,0 +1,12 @@
+
+#closeGalaxyInfos:hover {
+    -fx-scale-x: 1.2;
+    -fx-scale-y: 1.2;
+}
+
+#galaxyInfosPane {
+    -fx-border-width: 2px;
+    -fx-border-color: black;
+    -fx-border-insets: 0 0 0 0;
+    /*-fx-background-color: #dfe4ea;*/
+}
