@@ -3,6 +3,9 @@ package fr.istic.galaxsim.gui;
 import fr.istic.galaxsim.data.ParserAmasDatas;
 import fr.istic.galaxsim.data.ParserCosmosDatas;
 import fr.istic.galaxsim.data.ParserGalaxiesDatas;
+import fr.istic.galaxsim.gui.form.BrowseField;
+import fr.istic.galaxsim.gui.form.BrowseFieldControl;
+import fr.istic.galaxsim.gui.form.FormControl;
 import fr.istic.galaxsim.gui.form.IntegerFieldControl;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
@@ -19,14 +22,9 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.StackPane;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Translate;
-import javafx.stage.FileChooser;
-
-import java.io.File;
 
 public class MainWindow {
 
-	@FXML
-	private TextField dataFileField;
 	@FXML
 	private StackPane pane3D;
 	@FXML
@@ -37,13 +35,16 @@ public class MainWindow {
     private ProgressBar progressBar;
 	@FXML
     private TextField distanceField;
+	@FXML
+    private BrowseField dataFileField;
     @FXML
 	private GalaxyInfos galaxyInfos;
 
-	private File currentDataFile;
+    private BrowseFieldControl dataFileFieldControl;
+	private IntegerFieldControl distanceFieldControl;
 	
 	public MainWindow(){
-		currentDataFile = null;
+
     }
 	
 	@FXML
@@ -54,7 +55,10 @@ public class MainWindow {
         // La barre de chargement est uniquement affichee lorsque des donnees sont traitees
         progressBar.setManaged(false);
 
-        //IntegerFieldControl control = new IntegerFieldControl(distanceField);
+        // Ajout de controles sur les champs pour verifier la validite des donnees
+		dataFileFieldControl = new BrowseFieldControl(dataFileField);
+		distanceFieldControl = new IntegerFieldControl(distanceField);
+		distanceFieldControl.setLowerBound(0);
 
 		Group sceneRoot = new Group();
 
@@ -94,25 +98,9 @@ public class MainWindow {
 	}
 
 	@FXML
-	private void openFileBrowser(ActionEvent event) {
-		FileChooser fileChooser = new FileChooser();
-		fileChooser.setTitle("Sélection d'un jeu de données");
-		currentDataFile = fileChooser.showOpenDialog(null);
-
-		if(currentDataFile != null) {
-            dataFileField.setText(currentDataFile.getAbsolutePath());
-        }
-	}
-
-	@FXML
 	private void startDataAnalysis(ActionEvent event) {
         // @TODO verifier la validite des champs
-        if(currentDataFile == null) {
-            currentDataFile = new File(dataFileField.getText());
-        }
-
-        if(!currentDataFile.isFile()) {
-            System.out.println("Le fichier n'existe pas");
+        if(!FormControl.isValid(dataFileFieldControl, distanceFieldControl)) {
             return;
         }
 
@@ -125,10 +113,10 @@ public class MainWindow {
                 ParserCosmosDatas parser;
                 switch(type) {
                     case AMAS:
-                        parser = new ParserAmasDatas(currentDataFile.getAbsolutePath());
+                        parser = new ParserAmasDatas(dataFileField.getPath());
                         break;
                     case GALAXIES:
-                        parser = new ParserGalaxiesDatas(currentDataFile.getAbsolutePath());
+                        parser = new ParserGalaxiesDatas(dataFileField.getPath());
                         break;
                     default:
                         cancel(true);

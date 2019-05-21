@@ -7,31 +7,31 @@ import java.util.Optional;
 public class IntegerFieldControl extends FieldControl {
 
     private final TextField field;
-    private Optional<Integer> lowBound;
-    private Optional<Integer> highBound;
+    private Optional<Integer> lowerBound = Optional.empty();
+    private Optional<Integer> higherBound = Optional.empty();
 
     public IntegerFieldControl(TextField field) {
         this.field = field;
 
         // Seuls les chiffres sont acceptes, les autres sont effaces
         field.textProperty().addListener((obs, oldValue, newValue) -> {
-            field.setText(newValue.replaceAll("[^0-9]", ""));
+            field.setText(newValue.replaceAll("[^0-9\\-]", ""));
         });
     }
 
     public IntegerFieldControl(TextField field, int lowBound, int hightBound) {
         this(field);
 
-        setHighBound(hightBound);
-        setLowBound(lowBound);
+        setHigherBound(hightBound);
+        setLowerBound(lowBound);
     }
 
-    public int getHighBound() {
-        return highBound.get();
+    public int getHigherBound() {
+        return higherBound.get();
     }
 
-    public int getLowBound() {
-        return lowBound.get();
+    public int getLowerBound() {
+        return lowerBound.get();
     }
 
     /**
@@ -50,17 +50,41 @@ public class IntegerFieldControl extends FieldControl {
      * @return true si la valeur est comprise dans l'interval, false sinon
      */
     public boolean isValid() {
-        int value = getValue();
+        int value;
+        try {
+            value = getValue();
+        } catch(NumberFormatException e) {
+            return false;
+        }
 
-        return (lowBound.isPresent() && value >= getLowBound()) && (highBound.isPresent() && value < getHighBound());
+        // @OTODO Afficher un message d'erreur
+        if(lowerBound.isPresent() && value < getLowerBound()) {
+            return false;
+        }
+        else if(higherBound.isPresent() && value >= getHigherBound()) {
+            return false;
+        }
+        else {
+            return true;
+        }
     }
 
-    public void setHighBound(int value) {
-        highBound = Optional.of(value);
+    public void setHigherBound(int value) {
+        higherBound = Optional.of(value);
     }
 
-    public void setLowBound(int value) {
-        lowBound = Optional.of(value);
+    public void setLowerBound(int value) {
+        lowerBound = Optional.of(value);
+    }
+
+    @Override
+    public void hideError() {
+        field.getStyleClass().remove("field-error");
+    }
+
+    @Override
+    public void showError() {
+        field.getStyleClass().add("field-error");
     }
 
 }

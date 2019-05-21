@@ -30,7 +30,7 @@ public class GalaxyInfos extends VBox {
 
     @FXML
     public void initialize() {
-        setViewOrder(-1.0);
+        //setViewOrder(-1.0);
     }
 
     public void setGalaxy() {
