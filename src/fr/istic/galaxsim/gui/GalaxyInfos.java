@@ -46,7 +46,7 @@ public class GalaxyInfos extends VBox {
     private void movePane(MouseEvent event) {
         if(event.isPrimaryButtonDown()) {
             setTranslateX(getTranslateX() + event.getX() - getWidth() / 2);
-            setTranslateY(getTranslateY() + event.getY());
+            setTranslateY(getTranslateY() + event.getY() - controlBar.getHeight() / 2);
         }
     }
 
