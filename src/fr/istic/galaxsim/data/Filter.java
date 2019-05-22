@@ -84,4 +84,19 @@ public class Filter {
 		}
 		return listAmas;
 	}
+	
+	/**
+	 * methode retournant la liste d'amas se trouvant dans les intervalles de coordonées [x1,x2], [y1,y2], [z1,z2] à un moment t
+	 * @param position en x1, x2, y1, y2, z1, z2, et le moment t de l'action
+	 * @return une liste de d'amas
+	 */
+	public static ArrayList<Amas> filterCoordinateAmas(double x1,double x2, double y1,double y2,double z1,double z2, int t){
+		ArrayList<Amas> listAmas= new ArrayList<Amas>();
+		for(int i =0 ; i<DataBase.tableAmas.size();i++) {
+			if(DataBase.tableAmas.get(i).getCoordinate(t).isIn(x1, x2, y1, y2, z1, z2)) {
+				listAmas.add(DataBase.tableAmas.get(i));
+			}
+		}
+		return listAmas;
+	}
 }
