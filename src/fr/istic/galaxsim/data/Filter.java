@@ -68,4 +68,20 @@ public class Filter {
 		}
 		return listAmas;
 	}
+	
+	
+	/**
+	 * methode retournant la liste d'amas aillant une masse inférieure ou égale à celle indiquée en paramètre
+	 * @param mass 
+	 * @return une liste de d'amas
+	 */
+	public static ArrayList<Amas> filterMassAmas(double mass) {
+		ArrayList<Amas> listAmas= new ArrayList<Amas>();
+		for(int i =0 ; i<DataBase.tableAmas.size();i++) {
+			if(DataBase.tableAmas.get(i).getMass()<=mass) {
+				listAmas.add(DataBase.tableAmas.get(i));
+			}
+		}
+		return listAmas;
+	}
 }
