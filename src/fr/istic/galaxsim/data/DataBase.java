@@ -12,12 +12,34 @@ public class DataBase {
 	/**
 	 * table de galaxies (indice = identifiant)
 	 */
-	private static ArrayList<Galaxy> tableGalaxies = new ArrayList<Galaxy>();
+	public static ArrayList<Galaxy> tableGalaxies = new ArrayList<Galaxy>();
 	
 	/**
 	 * table d'amas (indice = identiant)
 	 */
-	private static ArrayList<Amas> tableAmas = new ArrayList<Amas>();
+	public static ArrayList<Amas> tableAmas = new ArrayList<Amas>();
+	
+	/**
+	 * methode permettant d'initialiser la table d'amas
+	 * @param datasAmas les donnees des amas
+	 */
+	public static void initAmas(String[][] datasAmas){
+		for (int i = 0; i<datasAmas.length; i++){
+			Amas a = Amas.create(datasAmas[i]);
+			addAmas(a);
+		}
+	}
+	
+	/**
+	 * methode permettant d'initialiser la table de galaxies
+	 * @param datasGalaxies les données de galaxies
+	 */
+	public static void initGalaxies(String[][] datasGalaxies){
+		for (int i = 0; i<datasGalaxies.length; i++){
+			Galaxy g = Galaxy.create(datasGalaxies[i]);
+			addGalaxy(g);
+		}
+	}
 	
 	/**
 	 * methode permettant de recuperer le tableau de toutes les galaxies
