@@ -37,11 +37,14 @@ public class MainWindow {
     private TextField distanceField;
 	@FXML
     private BrowseField dataFileField;
+	@FXML
+    private TextField massField;
     @FXML
 	private GalaxyInfos galaxyInfos;
 
     private BrowseFieldControl dataFileFieldControl;
 	private IntegerFieldControl distanceFieldControl;
+	private IntegerFieldControl massFieldControl;
 	
 	public MainWindow(){
 
@@ -56,9 +59,12 @@ public class MainWindow {
         progressBar.setManaged(false);
 
         // Ajout de controles sur les champs pour verifier la validite des donnees
-		dataFileFieldControl = new BrowseFieldControl(dataFileField);
-		distanceFieldControl = new IntegerFieldControl(distanceField);
+		dataFileFieldControl = new BrowseFieldControl(dataFileField, true);
+		distanceFieldControl = new IntegerFieldControl(distanceField, "distance", false);
 		distanceFieldControl.setLowerBound(0);
+
+		massFieldControl = new IntegerFieldControl(massField, "masse", false);
+        massFieldControl.setLowerBound(0);
 
 		Group sceneRoot = new Group();
 
@@ -99,8 +105,7 @@ public class MainWindow {
 
 	@FXML
 	private void startDataAnalysis(ActionEvent event) {
-        // @TODO verifier la validite des champs
-        if(!FormControl.isValid(dataFileFieldControl, distanceFieldControl)) {
+        if(!FormControl.isValid(dataFileFieldControl, distanceFieldControl, massFieldControl)) {
             return;
         }
 
@@ -132,6 +137,9 @@ public class MainWindow {
                 });
 
                 parser.toParse();
+
+                // @TODO utilisation des filtres
+
                 return parser;
             }
         };

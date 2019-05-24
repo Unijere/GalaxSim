@@ -34,7 +34,7 @@ public class BrowseField extends HBox {
     }
 
     public File getFile() {
-        return new File(pathField.getText());
+        return pathField.getText().isEmpty() ? null : new File(pathField.getText());
     }
 
     public String getPath() {

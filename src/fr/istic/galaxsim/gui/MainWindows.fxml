@@ -27,7 +27,10 @@
                               <Insets bottom="3.0" />
                            </VBox.margin>
                         </Label>
-                        <BrowseField fx:id="dataFileField" />
+                        <BrowseField fx:id="dataFileField">
+                           <VBox.margin>
+                              <Insets bottom="5.0" />
+                           </VBox.margin></BrowseField>
                         <Label text="Type">
                            <VBox.margin>
                               <Insets bottom="3.0" />
@@ -45,15 +48,15 @@
                         </Label>
                         <TextField fx:id="distanceField" styleClass="field">
                            <VBox.margin>
-                              <Insets />
+                              <Insets bottom="5.0" />
                            </VBox.margin>
                         </TextField>
-                        <Label text="Vélocité">
+                        <Label text="Masse (entière)">
                            <padding>
                               <Insets bottom="3.0" />
                            </padding>
                         </Label>
-                        <TextField />
+                        <TextField fx:id="massField" />
                      </children>
                      <padding>
                         <Insets left="7.0" right="7.0" />
