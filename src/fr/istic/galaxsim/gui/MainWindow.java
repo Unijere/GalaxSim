@@ -101,6 +101,10 @@ public class MainWindow {
         galaxyInfos.heightProperty().addListener((obs, oldValue, newValue) -> {
             galaxyInfos.setTranslateY((pane3D.getHeight() - galaxyInfos.getHeight()) / 2 - 7);
         });
+
+        // La fenetre doit etre affichee au premier plan
+        galaxyInfos.setViewOrder(-1.0);
+        galaxyInfos.setVisible(false);
 	}
 
 	@FXML
