@@ -18,6 +18,8 @@ public class GalaxSim extends Application {
         Parent root = FXMLLoader.load(getClass().getResource("gui/MainWindows.fxml"));
         Scene scene = new Scene(root, 800, 600);
 
+        scene.getStylesheets().add(getClass().getResource("gui/style.css").toExternalForm());
+
         stage.initStyle(StageStyle.DECORATED);
         stage.setTitle("GalaxSim");
         stage.setScene(scene);
