@@ -10,6 +10,14 @@ import java.util.*;
 public class DataBase {
 	
 	/**
+	 * code de trie :
+	 * 0: identifiant
+	 * 1: distance
+	 * 2: vitesse
+	 */
+	public static final int SORTING_ID = 0, SORTING_DISTANCE = 1, SORTING_VELOCITY = 2;
+	
+	/**
 	 * table de galaxies (indice = identifiant)
 	 */
 	public static ArrayList<Galaxy> tableGalaxies = new ArrayList<Galaxy>();
@@ -125,5 +133,57 @@ public class DataBase {
 	 */
 	public static int getNumberGalaxies(){
 		return tableGalaxies.size();
+	}
+	
+	/**
+	 * methode permettant de trier les amas
+	 * @param codeSorting le code de tri
+	 * @param descending boolean indiquant si le trie se faire de maniere décroissant ou pas
+	 */
+	public static void sortAmas(int codeSorting, boolean descending){
+		AbstractSorting sortingComparator = getSortingComparator(codeSorting, descending);
+		if (sortingComparator != null) {
+			tableAmas.sort(sortingComparator);
+		}
+	}
+	
+	/**
+	 * methode permettant de trier les galaxies
+	 * @param codeSorting le code de tri
+	 * @param descending boolean indiquant si le trie se faire de maniere décroissant ou pas
+	 */
+	public static void sortGalaxies(int codeSorting, boolean descending){
+		AbstractSorting sortingComparator = getSortingComparator(codeSorting, descending);
+		if (sortingComparator != null) {
+			tableGalaxies.sort(sortingComparator);
+		}
+	}
+	
+	/**
+	 * methode permettant de recuperer le type de comparateur pour le tri souhaité
+	 * @param codeSorting le code de tri
+	 * @param descending le boolean indiquant si le tri est de manière décroissante ou pas
+	 * @return le comparateur approprié
+	 */
+	private static AbstractSorting getSortingComparator(int codeSorting, boolean descending){
+		AbstractSorting sortingComparator = null;
+		
+		switch(codeSorting){
+		case SORTING_ID :
+			sortingComparator = new SortingById();
+			break;
+		case SORTING_DISTANCE :
+			sortingComparator = new SortingByDistance();
+			break;
+		case SORTING_VELOCITY :
+			sortingComparator = new SortingByVelocity();
+			break;
+		}
+		
+		if (sortingComparator != null) {
+			sortingComparator.setDescending(descending);
+		}
+		
+		return sortingComparator;
 	}
 }
