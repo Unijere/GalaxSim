@@ -28,7 +28,7 @@ public class Coordinate {
 	 * @param y la coordonnée y
 	 * @param z la coordonnée z
 	 */
-	public Coordinate(int x, int y, int z){
+	public Coordinate(double x, double y, double z){
 		this.x = x;
 		this.y = y;
 		this.z = z;
