@@ -58,5 +58,13 @@ public class Coordinate {
 		return z;
 	}
 	
+	/**
+	 * methode permetant de savoir si le point est ou non dans les intervalles de coordonées [x1,x2], [y1,y2], [z1,z2]
+	 * @return 1 si le poit est présent dans l'intervalle, sinon 0
+	 */
+	public boolean isIn(double x1,double x2, double y1,double y2,double z1,double z2) {
+		return x1<=x && x2>=x && y1<= y && y2>=y && z1<=z && z2>=z;
+	}
+	
 	
 }
