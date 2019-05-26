@@ -46,7 +46,7 @@ public class DataBase {
 	 * @return le tableau de toutes les galaxies
 	 */
 	public static Galaxy[] getAllGalaxies(){
-		return null;
+		return tableGalaxies.toArray(new Galaxy[tableGalaxies.size()]);
 	}
 	
 	/**
@@ -54,7 +54,7 @@ public class DataBase {
 	 * @return le tableau de tout les amas
 	 */
 	public static Amas[] getAllAmas(){
-		return null;
+		return tableAmas.toArray(new Amas[tableGalaxies.size()]);
 	}
 	
 	/**
