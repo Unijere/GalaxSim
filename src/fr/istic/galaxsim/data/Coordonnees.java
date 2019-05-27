@@ -1,4 +1,4 @@
-package fr.istic.galaxsim.gui;
+package fr.istic.galaxsim.data;
 
 import java.io.Serializable;
 

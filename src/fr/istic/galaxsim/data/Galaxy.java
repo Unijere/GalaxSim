@@ -1,4 +1,4 @@
-package fr.istic.galaxsim.gui;
+package fr.istic.galaxsim.data;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -136,7 +136,9 @@ public class Galaxy implements Serializable{
 		return this.coordonneesFuture.size();
 	}
 
-	
+	public String toString(){
+		return "galaxie "+this.name+" ";
+	}
 	
 	
 }

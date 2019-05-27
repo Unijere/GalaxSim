@@ -3,6 +3,7 @@ package fr.istic.galaxsim.gui;
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
+import fr.istic.galaxsim.data.Galaxy;
 import javafx.geometry.Point3D;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
@@ -25,12 +26,12 @@ public class Space3D {
 		
 		//pour que l'écran ne s'adapte pas aux positions des spheres
 		space.setManaged(false);
-		space.setLayoutX(600);
-		space.setLayoutY(400);
+		//space.setLayoutX(600);
+		//space.setLayoutY(400);
 		
 	}
 	public void addGalaxy(Galaxy g){
-		Sphere s1 = new Sphere(5);
+		Sphere s1 = new Sphere(10);
         Color c = Color.RED;
         s1.setMaterial(new PhongMaterial(c));
         s1.setTranslateX(g.getCoordonnees().x);
@@ -65,19 +66,13 @@ public class Space3D {
 	
 	public void play(double d){
 		
-		for(Path3DTransition pt : this.transitions){
-			//pt.stop();
-		}
 		
 		for(Path3DTransition pt : this.transitions){
 			pt.playFrom(Duration.seconds(d));
 			pt.getPath().setNext(d/pt.getTotalDuration().toSeconds());
 			
 		}
-		for(Path3DTransition pt : this.transitions){
-			//pt.play();
-			
-		}
+		
 	}
 	
 	
@@ -85,4 +80,6 @@ public class Space3D {
 	public Group getSpace(){
 		return this.space;
 	}
+	
+	
 }

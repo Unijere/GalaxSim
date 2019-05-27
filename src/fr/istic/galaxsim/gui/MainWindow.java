@@ -1,5 +1,6 @@
 package fr.istic.galaxsim.gui;
 
+import fr.istic.galaxsim.data.Galaxy;
 import fr.istic.galaxsim.data.ParserAmasDatas;
 import fr.istic.galaxsim.data.ParserCosmosDatas;
 import fr.istic.galaxsim.data.ParserGalaxiesDatas;
@@ -14,13 +15,19 @@ import javafx.scene.SubScene;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.shape.Sphere;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Translate;
 import javafx.stage.FileChooser;
 
 import java.io.File;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class MainWindow {
 
@@ -34,8 +41,16 @@ public class MainWindow {
     private Label infoLabel;
 	@FXML
     private ProgressBar progressBar;
-
+	@FXML
+	private Slider slider;
+	
 	private File currentDataFile;
+	
+	private Group sceneRoot;
+	
+	private Space3D space;
+	private Group spaceGroup = new Group();
+	private Universe universe;
 	
 	public MainWindow(){
 		currentDataFile = null;
@@ -44,15 +59,16 @@ public class MainWindow {
 	
 	@FXML
     public void initialize() {
+		
         dataTypeField.getItems().addAll(DataFileType.getDescriptions());
         dataTypeField.setValue(dataTypeField.getItems().get(0));
 
         // La barre de chargement est uniquement affichee lorsque des donnees sont traitees
         progressBar.setManaged(false);
 
-		Group sceneRoot = new Group();
+		sceneRoot = new Group();
 
-		Universe universe = new Universe(pane3D);
+		universe = new Universe(pane3D);
 
 		AxesIndicator axes = new AxesIndicator(0.8f);
         //Translate t = new Translate(-50, 70, -80);
@@ -76,7 +92,63 @@ public class MainWindow {
 		simScene.heightProperty().bind(pane3D.heightProperty());
 
         sceneRoot.getChildren().addAll(universe, axes);
+        
 		pane3D.getChildren().addAll(simScene);
+		//this.universe.getChildren().add(this.spaceGroup);
+		
+		
+		/*
+		 * 
+		 * Gestion du slider du temps 
+		 * 
+		 */
+		double min=0;
+		double max;
+		try{
+			max =  space.getTransitions().get(0).getTotalDuration().toSeconds();
+		}catch(Exception e){
+			max = 100;
+		}
+		
+		double value = 0;
+		
+		
+		//Slider slider = new Slider(min, max, value);
+		
+		slider.setOnMouseClicked((MouseEvent h) ->{
+			space.play(slider.getValue());
+			
+				});
+		
+		
+		/*
+		 * action répéter toutes les secondes pour actualiser le slider
+		 */
+		final Runnable task = new Runnable() {
+            
+	        @Override
+	        public void run() {
+	        	
+	            double max;
+	            try{
+	    			max = space.getTransitions().get(0).getTotalDuration().toSeconds();
+	    			slider.setValue(space.getTransitions().get(0).getCurrentTime().toSeconds());	    			
+	    			}catch(Exception e){
+	    			max = 100;
+	    		}
+	            slider.setMax(max);
+	            
+	            
+	        }
+	    };
+	         
+	    final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
+	        executor.scheduleAtFixedRate(task, 0, 1, TimeUnit.SECONDS);
+	        
+	        
+	        
+		
+		
 	}
 
 	@FXML
@@ -92,6 +164,15 @@ public class MainWindow {
 
 	@FXML
 	private void startDataAnalysis(ActionEvent event) {
+		
+		/*
+         * fonction test pour avoir un aperçu du résultat
+         */
+        createSpace();
+        
+        
+        
+        
         // @TODO verifier la validite des champs
         if(currentDataFile == null) {
             currentDataFile = new File(dataFileField.getText());
@@ -102,7 +183,7 @@ public class MainWindow {
             return;
         }
 
-        Task parseDataTask = new Task<ParserCosmosDatas>() {
+        Task<ParserCosmosDatas> parseDataTask = new Task<ParserCosmosDatas>() {
             @Override
             protected ParserCosmosDatas call() throws Exception {
                 progressBar.setManaged(true);
@@ -140,6 +221,37 @@ public class MainWindow {
             progressBar.setVisible(false);
 		});
         new Thread(parseDataTask).start();
+        
+        
+        
 	}
+	
+	
+	/*
+	 * fonction test pour avoir un aperçu du résultat
+	 */
+	private void createSpace() {
+		Galaxy.main(null);
+		Space3D space = new Space3D();
+		
+		File folder = new File("data");
+		File[] listOfFiles = folder.listFiles();
+
+		for (int i = 0; i < listOfFiles.length; i++) {
+		  if (listOfFiles[i].isFile()) {
+			  System.out.println(Galaxy.deserialize(listOfFiles[i].getName()));
+		    space.addGalaxy(Galaxy.deserialize(listOfFiles[i].getName()));
+		  }
+		}
+		
+		this.space = space;
+		this.spaceGroup.getChildren().add(space.getSpace());
+		this.universe.getChildren().add(this.spaceGroup);
+		space.play();
+		
+	}
+	
+	
+	
 
 }

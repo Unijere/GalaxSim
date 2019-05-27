@@ -10,6 +10,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Slider?>
 
 
 <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.istic.galaxsim.gui.MainWindow">
@@ -83,6 +84,9 @@
                         <Insets top="15.0" />
                      </VBox.margin>
                   </Label>
+                  <Slider fx:id="slider"  maxWidth="1.7976931348623157E308" >
+                  
+                  </Slider>
                </children>
                <opaqueInsets>
                   <Insets />
