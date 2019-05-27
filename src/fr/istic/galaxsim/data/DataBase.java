@@ -34,8 +34,12 @@ public class DataBase {
 	 */
 	public static void initAmas(String[][] datasAmas){
 		for (int i = 0; i<datasAmas.length; i++){
-			Amas a = Amas.create(datasAmas[i]);
-			addAmas(a);
+			Amas a = Amas.create(datasAmas[i]);	
+			if (a.getNbGalaxies() > 1){
+				addAmas(a);
+			} else {
+				addGalaxy(a.transformInGalaxy());
+			}
 		}
 	}
 	

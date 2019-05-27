@@ -23,14 +23,21 @@ public class Galaxy extends CosmosElement{
 	private String type;
 	
 	/**
+	 * la masse de l'amas associé
+	 */
+	private double amasMass;
+	
+	/**
 	 * constructeur
 	 * @param ident l'identifiant
 	 * @param distance la distance
 	 * @param velocity la vitesse
+	 * @param amasMass la masse de l'amas associé
 	 */
-	public Galaxy(int ident, double distance, double velocity, String type) {
+	public Galaxy(int ident, double distance, double velocity, String type, double amasMass) {
 		super(ident, distance, velocity);
 		this.type = type;
+		this.amasMass = amasMass;
 	}
 
 	/**
@@ -74,12 +81,20 @@ public class Galaxy extends CosmosElement{
 	}
 
 	/**
+	 * getter amasMass
+	 * @return amasMass
+	 */
+	public double getAmasMass() {
+		return amasMass;
+	}
+
+	/**
 	 * methode permettant de creer une galaxy à partir d'un taleau de données
 	 * @param datas le tableau de donnéees
 	 * @return la nouvelle galaxy
 	 */
 	public static Galaxy create(String[] datas){
-		if (datas.length == 10){
+		if (datas.length == 11){
 			String stringId = datas[0];
 			String name = datas[1];
 			String type = datas[2];
@@ -90,11 +105,13 @@ public class Galaxy extends CosmosElement{
 			String stringSGLon = datas[7];
 			String stringSGLat = datas[8];
 			String stringVelo = datas[9];
+			String stringMassAmas = datas[10];
 			
 			int id = -1;
 			double dist = -1;
 			double velo = -1;
 			int idAmas = -1;
+			double massAmas = 0;
 			
 			if (stringId != null) {
 				id = Integer.parseInt(stringId);
@@ -108,8 +125,11 @@ public class Galaxy extends CosmosElement{
 			if (stringIdAmas != null){
 				idAmas = Integer.parseInt(stringIdAmas);
 			}
+			if (stringMassAmas != null){
+				massAmas = Double.parseDouble(stringMassAmas);
+			}
 			
-			Galaxy newGalaxy = new Galaxy(id, dist, velo, type);
+			Galaxy newGalaxy = new Galaxy(id, dist, velo, type, massAmas);
 			
 			newGalaxy.setName(name);
 			newGalaxy.setAmasIdent(idAmas);
@@ -138,7 +158,8 @@ public class Galaxy extends CosmosElement{
 	public String toString(){
 		return super.toString() + " | name: " + name + " | " + 
 				"type: " + type + " | " + 
-				"amasIdent: " + amasIdent;
+				"amasIdent: " + amasIdent + " | " + 
+				"amasMass: " + amasMass;
 	}
 	
 }
