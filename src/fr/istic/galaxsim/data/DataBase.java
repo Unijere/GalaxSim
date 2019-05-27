@@ -14,8 +14,9 @@ public class DataBase {
 	 * 0: identifiant
 	 * 1: distance
 	 * 2: vitesse
+	 * 3: la mass (seulement pour les amas)
 	 */
-	public static final int SORTING_ID = 0, SORTING_DISTANCE = 1, SORTING_VELOCITY = 2;
+	public static final int SORTING_ID = 0, SORTING_DISTANCE = 1, SORTING_VELOCITY = 2, SORTING_MASS = 3;
 	
 	/**
 	 * table de galaxies (indice = identifiant)
@@ -141,7 +142,7 @@ public class DataBase {
 	 * @param descending boolean indiquant si le trie se faire de maniere décroissant ou pas
 	 */
 	public static void sortAmas(int codeSorting, boolean descending){
-		AbstractSorting sortingComparator = getSortingComparator(codeSorting, descending);
+		AbstractSorting sortingComparator = getSortingComparatorAmas(codeSorting, descending);
 		if (sortingComparator != null) {
 			tableAmas.sort(sortingComparator);
 		}
@@ -153,7 +154,7 @@ public class DataBase {
 	 * @param descending boolean indiquant si le trie se faire de maniere décroissant ou pas
 	 */
 	public static void sortGalaxies(int codeSorting, boolean descending){
-		AbstractSorting sortingComparator = getSortingComparator(codeSorting, descending);
+		AbstractSorting sortingComparator = getSortingComparatorGalaxies(codeSorting, descending);
 		if (sortingComparator != null) {
 			tableGalaxies.sort(sortingComparator);
 		}
@@ -183,6 +184,44 @@ public class DataBase {
 		if (sortingComparator != null) {
 			sortingComparator.setDescending(descending);
 		}
+		
+		return sortingComparator;
+	}
+	
+	/**
+	 * methode permettant de recuperer le type de comparateur pour le tri souhaité (seulement pour les amas)
+	 * @param codeSorting le code de tri
+	 * @param descending le boolean indiquant si le tri est de manière décroissante ou pas
+	 * @return le comparateur approprié
+	 */
+	private static AbstractSorting getSortingComparatorAmas(int codeSorting, boolean descending){
+		AbstractSorting sortingComparator = getSortingComparator(codeSorting, descending);
+		
+		if (sortingComparator != null) {
+			return sortingComparator;
+		}
+		
+		switch(codeSorting){
+		case SORTING_MASS :
+			sortingComparator = new SortingByMass();
+			break;
+		}
+		
+		if (sortingComparator != null) {
+			sortingComparator.setDescending(descending);
+		}
+		
+		return sortingComparator;
+	}
+	
+	/**
+	 * methode permettant de recuperer le type de comparateur pour le tri souhaité (seulement pour les galaxies)
+	 * @param codeSorting le code de tri
+	 * @param descending le boolean indiquant si le tri est de manière décroissante ou pas
+	 * @return le comparateur approprié
+	 */
+	private static AbstractSorting getSortingComparatorGalaxies(int codeSorting, boolean descending){
+		AbstractSorting sortingComparator = getSortingComparator(codeSorting, descending);
 		
 		return sortingComparator;
 	}
