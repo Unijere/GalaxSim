@@ -1,8 +1,6 @@
 package fr.istic.galaxsim.gui;
 
-import fr.istic.galaxsim.data.ParserAmasDatas;
-import fr.istic.galaxsim.data.ParserCosmosDatas;
-import fr.istic.galaxsim.data.ParserGalaxiesDatas;
+import fr.istic.galaxsim.data.*;
 import fr.istic.galaxsim.gui.form.BrowseField;
 import fr.istic.galaxsim.gui.form.BrowseFieldControl;
 import fr.istic.galaxsim.gui.form.FormControl;
@@ -22,6 +20,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.StackPane;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Translate;
+
+import java.util.Optional;
 
 public class MainWindow {
 
@@ -113,9 +113,9 @@ public class MainWindow {
             return;
         }
 
-        Task parseDataTask = new Task<ParserCosmosDatas>() {
+        Task parseDataTask = new Task<DataFileType>() {
             @Override
-            protected ParserCosmosDatas call() throws Exception {
+            protected DataFileType call() throws Exception {
                 progressBar.setManaged(true);
                 progressBar.setVisible(true);
                 DataFileType type = DataFileType.getTypeFromDescription(dataTypeField.getValue());
@@ -140,16 +140,41 @@ public class MainWindow {
                     });
                 });
 
+
+                // Parametrage des filtres
+                Optional<Integer> distanceFilterValue = distanceFieldControl.getOptionalValue();
+                if(distanceFilterValue.isPresent()) {
+                    Filter.setDistanceFilter(distanceFilterValue.get());
+                }
+
+                Optional<Integer> massFilterValue = massFieldControl.getOptionalValue();
+                if(massFilterValue.isPresent()) {
+                    System.out.println("La masse : " + massFilterValue.get());
+                    Filter.setMassFilter(massFilterValue.get());
+                }
+
+                // Extraction des donnees
                 parser.toParse();
 
-                // @TODO utilisation des filtres
+                // Suppression des anciennes donnees
+                DataBase.removeAllAmas();
+                DataBase.removeAllGalaxies();
 
-                return parser;
+                // Ajout des donnees dans la base de donnees
+                switch(type) {
+                    case AMAS:
+                        DataBase.initAmas(parser.getAllDatas());
+                        break;
+                    case GALAXIES:
+                        DataBase.initGalaxies(parser.getAllDatas());
+                        break;
+                }
+
+                return type;
             }
         };
         parseDataTask.addEventHandler(WorkerStateEvent.WORKER_STATE_SUCCEEDED, taskEvent -> {
-            ParserCosmosDatas parser = (ParserCosmosDatas) parseDataTask.getValue();
-			infoLabel.setText("Nombre d'elements trouves : " + parser.getAllDatas().length);
+			infoLabel.setText(String.format("Il y a %d amas et %d galaxies dans le fichier", DataBase.getNumberAmas(), DataBase.getNumberGalaxies()));
             progressBar.setManaged(false);
             progressBar.setVisible(false);
 		});
