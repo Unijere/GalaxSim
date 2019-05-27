@@ -21,10 +21,10 @@ public class CalculGalaxies {
 				double z;
 
 				//calcul des coordonnées
-			 	z = Math.sin(g1.getSuperGalacticLat()) * g1.getDistance();
-			  double hypothenus = Math.cos(g1.getSuperGalacticLat()) * g1.getDistance();
-			 	x = Math.cos(g1.getSuperGalacticLon()) * hypothenus;
-			  y = Math.sin(g1.getSuperGalacticLon()) * hypothenus;
+			 	z = Math.sin(Math.toRadians(g1.getSuperGalacticLat())) * g1.getDistance();
+			  double hypothenus = Math.cos(Math.toRadians(g1.getSuperGalacticLat())) * g1.getDistance();
+			 	x = Math.cos(Math.toRadians(g1.getSuperGalacticLon())) * hypothenus;
+			  y = Math.sin(Math.toRadians(g1.getSuperGalacticLon())) * hypothenus;
 
 				//enregistrement des données initiales
 				Coordinate coord = new Coordinate(x, y, z);
@@ -75,21 +75,8 @@ public class CalculGalaxies {
 			public static double forceX(Galaxy g1, Amas a, int t, double F)
 			{
 				double longitude = longitudeAttraction(g1, a, t);
-
-				if((longitude / 90) == 0 ){
-					return F * Math.cos(longitude);
-				}
-				if((longitude / 90) == 1 ){
-					return (-F) * Math.sin(longitude % 90);
-				}
-				if((longitude / 90) == 2 ){
-					return (-F) * Math.cos(longitude % 90);
-				}
-				if((longitude / 90) == 3 ){
-					return F * Math.sin(longitude % 90);
-				}
 				
-				return 0.0;
+				return F * Math.cos(longitude);
 			}
 
 			//retourne la force d'attraction entre deux galaxies sur l'axe Y
@@ -97,20 +84,7 @@ public class CalculGalaxies {
 			{
 				double longitude = longitudeAttraction(g1, a, t);
 
-				if((longitude / 90) == 0){
-					return F * Math.sin(longitude);
-				}
-				if((longitude / 90) == 1){
-					return F * Math.cos(longitude % 90);
-				}
-				if((longitude / 90) == 2){
-					return (-F) * Math.sin(longitude % 90);
-				}
-				if((longitude / 90) == 3){
-					return (-F) * Math.cos(longitude % 90);
-				}
-				
-				return 0.0;
+				return  F * Math.sin(longitude);
 			}
 
 			//retourne la force d'attraction entre deux galaxies sur l'axe Z
@@ -118,20 +92,8 @@ public class CalculGalaxies {
 			{
 				double latitude = latitudeAttraction(g1, a, t);
 
-				if((latitude / 90) == 0){
-					return F * Math.sin(latitude);
-				}
-				if((latitude / 90) == 1){
-					return F * Math.cos(latitude % 90);
-				}
-				if((latitude / 90) == 2){
-					return (-F) * Math.sin(latitude % 90);
-				}
-				if((latitude / 90) == 3){
-					return (-F) * Math.cos(latitude % 90);
-				}
-				
-				return 0.0;
+				return F * Math.sin(latitude);
+			
 			}
 
 			//retourne la vitesse de la galaxie sur l'axe X
@@ -141,28 +103,17 @@ public class CalculGalaxies {
 				double vitesse = 71 * g1.getDistance();
 				vitesse = g1.getVelocity() - vitesse;
 
-				if(sommeForceX > 0 && sommeForceY >= 0)
+				if( (sommeForceX > 0 && sommeForceY >= 0) || (sommeForceX < 0 && sommeForceY <= 0) )
 				{
 					angle = Math.atan(sommeForceY/sommeForceX);
 					return vitesse* Math.cos(angle);
 				}
-				if(sommeForceX <= 0 && sommeForceY > 0)
+				else
 				{
-					angle = Math.atan((-sommeForceX)/sommeForceY);
-					return -vitesse* Math.sin(angle);
+					angle = Math.atan(sommeForceX/sommeForceY);
+					return vitesse* Math.cos(angle);
 				}
-				if(sommeForceX < 0 && sommeForceY <= 0)
-				{
-					angle = Math.atan(sommeForceY/sommeForceX);
-					return -vitesse* Math.cos(angle);
-				}
-				if(sommeForceX >= 0 && sommeForceY < 0)
-				{
-					angle = Math.atan(sommeForceX/(-sommeForceY));
-					return vitesse* Math.sin(angle);
-				}
-				
-				return 0.0;
+			
 			}
 
 			//retourne la vitesse de la galaxie sur l'axe Y
@@ -172,28 +123,17 @@ public class CalculGalaxies {
 				double vitesse = 71 * g1.getDistance();
 				vitesse = g1.getVelocity() - vitesse;
 
-				if(sommeForceX > 0 && sommeForceY >= 0)
+				if( (sommeForceX > 0 && sommeForceY >= 0) || (sommeForceX < 0 && sommeForceY <= 0) )
 				{
 					angle = Math.atan(sommeForceY/sommeForceX);
 					return vitesse* Math.sin(angle);
 				}
-				if(sommeForceX <= 0 && sommeForceY > 0)
+				else
 				{
-					angle = Math.atan((-sommeForceX)/sommeForceY);
-					return vitesse* Math.cos(angle);
+					angle = Math.atan(sommeForceX/sommeForceY);
+					return vitesse* Math.sin(angle);
 				}
-				if(sommeForceX < 0 && sommeForceY <= 0)
-				{
-					angle = Math.atan(sommeForceY/sommeForceX);
-					return -vitesse* Math.sin(angle);
-				}
-				if(sommeForceX >= 0 && sommeForceY < 0)
-				{
-					angle = Math.atan(sommeForceX/(-sommeForceY));
-					return -vitesse* Math.cos(angle);
-				}
-				
-				return 0.0;
+
 			}
 
 			//retourne la vitesse de la galaxie sur l'axe Z
@@ -208,28 +148,16 @@ public class CalculGalaxies {
 
 				double Zprim = Math.sqrt(x+y);
 
-				if(Zprim > 0 && sommeForceZ >= 0)
+				if( (Zprim > 0 && sommeForceZ >= 0) || (Zprim < 0 && sommeForceZ <= 0) )
 				{
 					angle = Math.atan(sommeForceZ/Zprim);
 					return vitesse* Math.sin(angle);
 				}
-				if(Zprim <= 0 && sommeForceZ > 0)
+				else
 				{
-					angle = Math.atan((-Zprim)/sommeForceZ);
+					angle = Math.atan(Zprim/sommeForceZ);
 					return vitesse* Math.cos(angle);
 				}
-				if(Zprim < 0 && sommeForceZ <= 0)
-				{
-					angle = Math.atan(sommeForceZ/Zprim);
-					return -vitesse* Math.sin(angle);
-				}
-				if(Zprim >= 0 && sommeForceZ < 0)
-				{
-					angle = Math.atan(Zprim/(-sommeForceZ));
-					return -vitesse* Math.cos(angle);
-				}
-				
-				return 0.0;
 			}
 
 			public static void coordByTime(Galaxy g1, double sommeForceX, double sommeForceY, double sommeForceZ, int t)

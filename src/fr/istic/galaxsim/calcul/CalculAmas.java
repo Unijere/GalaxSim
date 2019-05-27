@@ -23,10 +23,10 @@ public class CalculAmas {
 				double z;
 
 				//calcul des coordonnées
-			 	z = Math.sin(a1.getSuperGalacticLat()) * a1.getDistance();
-			  double hypothenus = Math.cos(a1.getSuperGalacticLat()) * a1.getDistance();
-			 	x = Math.cos(a1.getSuperGalacticLon()) * hypothenus;
-			  y = Math.sin(a1.getSuperGalacticLon()) * hypothenus;
+			 	z = Math.sin(Math.toRadians(a1.getSuperGalacticLat())) * a1.getDistance();
+			 	double hypothenus = Math.cos(Math.toRadians(a1.getSuperGalacticLat())) * a1.getDistance();
+			 	x = Math.cos(Math.toRadians(a1.getSuperGalacticLon())) * hypothenus;
+			 	y = Math.sin(Math.toRadians(a1.getSuperGalacticLon())) * hypothenus;
 
 				//enregistrement des données initiales
 				Coordinate coord = new Coordinate(x, y, z);
@@ -88,20 +88,7 @@ public class CalculAmas {
 			{
 				double longitude = longitudeAttraction(a1, a2, t);
 
-				if((longitude / 90) == 0 ){
-					return F * Math.cos(longitude);
-				}
-				if((longitude / 90) == 1 ){
-					return (-F) * Math.sin(longitude % 90);
-				}
-				if((longitude / 90) == 2 ){
-					return (-F) * Math.cos(longitude % 90);
-				}
-				if((longitude / 90) == 3 ){
-					return F * Math.sin(longitude % 90);
-				}
-				
-				return 0.0;
+				return F * Math.cos(longitude);
 			}
 
 			//retourne la force d'attraction entre deux galaxies sur l'axe Y
@@ -109,20 +96,7 @@ public class CalculAmas {
 			{
 				double longitude = longitudeAttraction(a1, a2, t);
 
-				if((longitude / 90) == 0){
-					return F * Math.sin(longitude);
-				}
-				if((longitude / 90) == 1){
-					return F * Math.cos(longitude % 90);
-				}
-				if((longitude / 90) == 2){
-					return (-F) * Math.sin(longitude % 90);
-				}
-				if((longitude / 90) == 3){
-					return (-F) * Math.cos(longitude % 90);
-				}
-				
-				return 0.0;
+				return F * Math.sin(longitude);
 			}
 
 			//retourne la force d'attraction entre deux galaxies sur l'axe Z
@@ -130,20 +104,7 @@ public class CalculAmas {
 			{
 				double latitude = latitudeAttraction(a1, a2, t);
 
-				if((latitude / 90) == 0){
-					return F * Math.sin(latitude);
-				}
-				if((latitude / 90) == 1){
-					return F * Math.cos(latitude % 90);
-				}
-				if((latitude / 90) == 2){
-					return (-F) * Math.sin(latitude % 90);
-				}
-				if((latitude / 90) == 3){
-					return (-F) * Math.cos(latitude % 90);
-				}
-				
-				return 0.0;
+				return F * Math.sin(latitude);
 			}
 
 			//retourne la vitesse de la galaxie sur l'axe X
@@ -153,28 +114,18 @@ public class CalculAmas {
 				double vitesse = 71 * a1.getDistance();
 				vitesse = a1.getVelocity() - vitesse;
 
-				if(sommeForceX > 0 && sommeForceY >= 0)
+				if((sommeForceX > 0 && sommeForceY >= 0) || (sommeForceX < 0 && sommeForceY <= 0))
 				{
 					angle = Math.atan(sommeForceY/sommeForceX);
 					return vitesse* Math.cos(angle);
 				}
-				if(sommeForceX <= 0 && sommeForceY > 0)
-				{
-					angle = Math.atan((-sommeForceX)/sommeForceY);
-					return -vitesse* Math.sin(angle);
-				}
-				if(sommeForceX < 0 && sommeForceY <= 0)
-				{
-					angle = Math.atan(sommeForceY/sommeForceX);
-					return -vitesse* Math.cos(angle);
-				}
-				if(sommeForceX >= 0 && sommeForceY < 0)
-				{
-					angle = Math.atan(sommeForceX/(-sommeForceY));
-					return vitesse* Math.sin(angle);
-				}
 				
-				return 0.0;
+				else
+				{
+					angle = Math.atan(sommeForceX/sommeForceY);
+					return vitesse* Math.cos(angle);
+				}
+			
 			}
 
 			//retourne la vitesse de la galaxie sur l'axe Y
@@ -184,25 +135,16 @@ public class CalculAmas {
 				double vitesse = 71 * a1.getDistance();
 				vitesse = a1.getVelocity() - vitesse;
 
-				if(sommeForceX > 0 && sommeForceY >= 0)
+				if( (sommeForceX > 0 && sommeForceY >= 0) || (sommeForceX < 0 && sommeForceY <= 0) )
 				{
 					angle = Math.atan(sommeForceY/sommeForceX);
 					return vitesse* Math.sin(angle);
 				}
-				if(sommeForceX <= 0 && sommeForceY > 0)
+				
+				else
 				{
-					angle = Math.atan((-sommeForceX)/sommeForceY);
-					return vitesse* Math.cos(angle);
-				}
-				if(sommeForceX < 0 && sommeForceY <= 0)
-				{
-					angle = Math.atan(sommeForceY/sommeForceX);
-					return -vitesse* Math.sin(angle);
-				}
-				if(sommeForceX >= 0 && sommeForceY < 0)
-				{
-					angle = Math.atan(sommeForceX/(-sommeForceY));
-					return -vitesse* Math.cos(angle);
+					angle = Math.atan(sommeForceX/sommeForceY);
+					return vitesse* Math.sin(angle);
 				}
 				
 				return 0.0;
@@ -220,28 +162,16 @@ public class CalculAmas {
 
 				double Zprim = Math.sqrt(x+y);
 
-				if(Zprim > 0 && sommeForceZ >= 0)
+				if( (Zprim > 0 && sommeForceZ >= 0) || (Zprim < 0 && sommeForceZ <= 0) )
 				{
 					angle = Math.atan(sommeForceZ/Zprim);
 					return vitesse* Math.sin(angle);
 				}
-				if(Zprim <= 0 && sommeForceZ > 0)
+				else
 				{
-					angle = Math.atan((-Zprim)/sommeForceZ);
-					return vitesse* Math.cos(angle);
+					angle = Math.atan(Zprim/sommeForceZ);
+					return vitesse* Math.sin(angle);
 				}
-				if(Zprim < 0 && sommeForceZ <= 0)
-				{
-					angle = Math.atan(sommeForceZ/Zprim);
-					return -vitesse* Math.sin(angle);
-				}
-				if(Zprim >= 0 && sommeForceZ < 0)
-				{
-					angle = Math.atan(Zprim/(-sommeForceZ));
-					return -vitesse* Math.cos(angle);
-				}
-				
-				return 0.0;
 			}
 
 			public static void coordByTime(Amas a1, double sommeForceX, double sommeForceY, double sommeForceZ, int t)
