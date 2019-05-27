@@ -13,14 +13,21 @@ public class Amas extends CosmosElement{
 	private double mass; 
 	
 	/**
+	 * le nombre de galaxies présent dans l'amas
+	 */
+	private int nbGalaxies;
+	
+	/**
 	 * constructeur
 	 * @param ident l'identifiant
 	 * @param distance la distance
 	 * @param velocity la vitesse
+	 * @param nbGalaxies le nombre de galaxies
 	 */
-	public Amas(int ident, double distance, double velocity, double mass) {
+	public Amas(int ident, double distance, double velocity, double mass, int nbGalaxies) {
 		super(ident, distance, velocity);
 		this.mass = mass;
+		this.nbGalaxies = nbGalaxies;
 	}
 
 	/**
@@ -32,12 +39,20 @@ public class Amas extends CosmosElement{
 	}
 	
 	/**
+	 * getter nbGalaxies
+	 * @return nbGalaxies
+	 */
+	public int getNbGalaxies() {
+		return nbGalaxies;
+	}
+
+	/**
 	 * methode permettant de creer un amas à partir d'un taleau de données
 	 * @param datas le tableau de donnéees
 	 * @return le nouvel amas
 	 */
 	public static Amas create(String datas[]){
-		if (datas.length == 9){
+		if (datas.length == 10){
 			String stringId = datas[0];
 			String stringDist = datas[2];
 			String stringGLon = datas[3];
@@ -46,11 +61,13 @@ public class Amas extends CosmosElement{
 			String stringSGLat = datas[6];
 			String stringVelo = datas[7];
 			String stringMass = datas[8];
+			String stringNbGalaxies = datas[9];
 			
 			int id = -1;
 			double dist = -1;
 			double velo = -1;
 			double mass = -1;
+			int nbGalaxies = 1;
 			
 			if (stringId != null) {
 				id = Integer.parseInt(stringId);
@@ -64,8 +81,11 @@ public class Amas extends CosmosElement{
 			if (stringMass != null){
 				mass = Double.parseDouble(stringMass);
 			}
+			if (stringNbGalaxies != null){
+				nbGalaxies = Integer.parseInt(stringNbGalaxies);
+			}
 			
-			Amas newAmas = new Amas(id, dist, velo, mass);
+			Amas newAmas = new Amas(id, dist, velo, mass, nbGalaxies);
 			
 			if (stringGLon != null && stringGLat != null){
 				double GLon = Double.parseDouble(stringGLon);
@@ -89,6 +109,6 @@ public class Amas extends CosmosElement{
 	 * methode toString
 	 */
 	public String toString(){
-		return super.toString() + " | masse: " + mass;
+		return super.toString() + " | masse: " + mass + " | " + "nbGalaxies: " + nbGalaxies;
 	}
 }
