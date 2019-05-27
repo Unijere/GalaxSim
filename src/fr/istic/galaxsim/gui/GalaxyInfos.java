@@ -1,7 +1,9 @@
 package fr.istic.galaxsim.gui;
 
+import fr.istic.galaxsim.data.Galaxy;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -15,6 +17,17 @@ public class GalaxyInfos extends VBox {
     private GridPane pane;
     @FXML
     private HBox controlBar;
+
+    @FXML
+    private Label identLabel;
+    @FXML
+    private Label velocityLabel;
+    @FXML
+    private Label distanceLabel;
+    @FXML
+    private Label sglongLabel;
+    @FXML
+    private Label sglatLabel;
 
     public GalaxyInfos() {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("GalaxyInfos.fxml"));
@@ -33,8 +46,12 @@ public class GalaxyInfos extends VBox {
 
     }
 
-    public void setGalaxy() {
-        // @TODO en attente de la classe Galaxy
+    public void setGalaxy(Galaxy g) {
+        identLabel.setText(String.valueOf(g.getIdent()));
+        velocityLabel.setText(String.valueOf(g.getVelocity()));
+        distanceLabel.setText(String.valueOf(g.getDistance()));
+        sglongLabel.setText(String.valueOf(g.getSuperGalacticLon()));
+        sglatLabel.setText(String.valueOf(g.getSuperGalacticLat()));
     }
 
     @FXML
