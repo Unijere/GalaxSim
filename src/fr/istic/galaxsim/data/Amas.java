@@ -106,6 +106,18 @@ public class Amas extends CosmosElement{
 	}
 	
 	/**
+	 * methode permettant de transformer un amas en galaxy
+	 * @return la transformation en galaxy
+	 */
+	public Galaxy transformInGalaxy(){
+		Galaxy g = new Galaxy(this.getIdent(), this.getDistance(), this.getVelocity(), null,this.getMass());
+		g.setGalacticLongLat(this.getGalacticLon(), this.getGalacticLat());
+		g.setSuperGalacticLongLat(this.getSuperGalacticLon(), this.getSuperGalacticLat());
+		
+		return g;
+	}
+	
+	/**
 	 * methode toString
 	 */
 	public String toString(){
