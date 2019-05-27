@@ -9,6 +9,26 @@ import java.util.ArrayList;
 public class Filter {
 	
 	/**
+	 * boolean indiquant si le filtre de distance est activé ou pas
+	 */
+	private static boolean filterDistanceActived = false;
+	
+	/**
+	 * boolean indiquant si le filtre de vitesse est activé ou pas
+	 */
+	private static boolean filterVelocityActived = false;
+	
+	/**
+	 * boolean indiquant si le filtre de masse est activé ou pas
+	 */
+	private static boolean filterMassActived = false;
+	
+	/**
+	 * boolean indiquant si le filtre de coordonnée est activé ou pas
+	 */
+	private static boolean filterCoordinateActived = false;
+	
+	/**
 	 * filtre de distance
 	 */
 	private static double distance = -1;
@@ -70,6 +90,7 @@ public class Filter {
 	 */
 	public static void setDistanceFilter(double d){
 		distance = d;
+		filterDistanceActived = true;
 	}
 	
 	/**
@@ -78,6 +99,7 @@ public class Filter {
 	 */
 	public static void setVelocityFilter(double v){
 		velocity = v;
+		filterVelocityActived = true;
 	}
 	
 	/**
@@ -86,6 +108,7 @@ public class Filter {
 	 */
 	public static void setMassFilter(double m){
 		mass = m;
+		filterMassActived = true;
 	}
 	
 	/**
@@ -106,6 +129,7 @@ public class Filter {
 		z1 = Z1;
 		z2 = Z2;
 		t = T;
+		filterCoordinateActived = true;
 	}
 	
 	/**
@@ -116,6 +140,11 @@ public class Filter {
 		velocity = -1;
 		mass = -1;
 		t = -1;
+		
+		filterDistanceActived = false;
+		filterVelocityActived = false;
+		filterMassActived = false;
+		filterCoordinateActived = false;
 	}
 	
 	/**
@@ -128,7 +157,7 @@ public class Filter {
 		if (cosmosElement.getDistance() <= distance) {
 			return true;
 		}
-		return distance == -1;
+		return !filterDistanceActived;
 	}
 	
 	/**
@@ -141,7 +170,7 @@ public class Filter {
 		if (cosmosElement.getVelocity() <= velocity) {
 			return true;
 		}
-		return velocity == -1;
+		return !filterVelocityActived;
 	}
 		
 	/**
@@ -154,7 +183,7 @@ public class Filter {
 		if (amas.getMass() <= mass) {
 			return true;
 		}
-		return mass == -1;
+		return !filterMassActived;
 	}
 	
 	/**
@@ -168,6 +197,6 @@ public class Filter {
 		if (c != null && c.isIn(x1, x2, y1, y2, z1, z2)) {
 			return true;
 		}
-		return t == -1;
+		return !filterCoordinateActived;
 	}	
 }
