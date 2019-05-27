@@ -67,7 +67,7 @@ public class DataBase {
 	 * @return le tableau de tout les amas
 	 */
 	public static Amas[] getAllAmas(){
-		return tableAmas.toArray(new Amas[tableGalaxies.size()]);
+		return tableAmas.toArray(new Amas[tableAmas.size()]);
 	}
 	
 	/**
@@ -75,7 +75,9 @@ public class DataBase {
 	 * @param g la galaxie que l'on souhaite ajouter
 	 */
 	public static void addGalaxy(Galaxy g){
-		tableGalaxies.add(g);
+		if (Filter.goodGalaxies(g)) {
+			tableGalaxies.add(g);
+		}
 	}
 	
 	/**
@@ -83,7 +85,9 @@ public class DataBase {
 	 * @param a l'amas que l'on souhaite ajouter
 	 */
 	public static void addAmas(Amas a){
-		tableAmas.add(a);
+		if (Filter.goodAmas(a)) {
+			tableAmas.add(a);
+		}
 	}
 	
 	/**

@@ -55,33 +55,21 @@ public class Filter {
 	
 	
 	/**
-	 * methode permettant de filtrer les amas
-	 * @return tableau d'amas
+	 * méthode permettant de savoir si un amas correspond bien au filtres
+	 * @param a l'amas
+	 * @return boolean
 	 */
-	public static Amas[] filterAmas() {
-		ArrayList<Amas> listAmas = new ArrayList<Amas>();
-		for (int i = 0; i<DataBase.tableAmas.size(); i++) {
-			Amas a = DataBase.tableAmas.get(i);
-			if (goodDistance(a) && goodVelocity(a) && goodMassAmas(a) && goodCoordinate(a)){
-				listAmas.add(a);
-			}
-		}
-		return listAmas.toArray(new Amas[listAmas.size()]);
+	public static boolean goodAmas(Amas a){
+		return (goodDistance(a) && goodVelocity(a) && goodMassAmas(a) && goodCoordinate(a));
 	}
 	
 	/**
-	 * méthode permettant de filtrer les galaxies
-	 * @return tableau de galaxies
+	 * méthode permettant de savoir si une galaxy correspond bien au filtres
+	 * @param g la galaxy
+	 * @return boolean
 	 */
-	public static Galaxy[] filterGalaxy() {
-		ArrayList<Galaxy> listGalaxies = new ArrayList<Galaxy>();
-		for (int i = 0; i<DataBase.tableGalaxies.size(); i++) {
-			Galaxy g = DataBase.tableGalaxies.get(i);
-			if (goodDistance(g) && goodVelocity(g) && goodCoordinate(g)){
-				listGalaxies.add(g);
-			}
-		}
-		return listGalaxies.toArray(new Galaxy[listGalaxies.size()]);
+	public static boolean goodGalaxies(Galaxy g){
+		return (goodDistance(g) && goodVelocity(g) && goodCoordinate(g));
 	}
 	
 	/**
