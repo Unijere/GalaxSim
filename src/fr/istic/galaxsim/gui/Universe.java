@@ -1,15 +1,25 @@
 package fr.istic.galaxsim.gui;
 
+import fr.istic.galaxsim.data.Amas;
+import fr.istic.galaxsim.data.Coordinate;
+import fr.istic.galaxsim.data.Galaxy;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
 import javafx.scene.shape.DrawMode;
+import javafx.scene.shape.Sphere;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Translate;
 
 public class Universe extends Group {
+
+    private final GalaxyInfos galaxyInfos;
+
+    private Group elements = new Group();
 
     private Translate translate = new Translate();
     public Rotate rotateX = new Rotate(20, Rotate.X_AXIS);
@@ -18,10 +28,12 @@ public class Universe extends Group {
     private double lastMouseClickPosX;
     private double lastMouseClickPosY;
 
-    public Universe(Node parentContainer) {
+    public Universe(Node parentContainer, GalaxyInfos galaxyInfos) {
+        this.galaxyInfos = galaxyInfos;
+
         Box box = new Box(50, 50, 50);
         box.setDrawMode(DrawMode.LINE);
-        getChildren().add(box);
+        getChildren().addAll(box, elements);
 
         getTransforms().addAll(rotateX, rotateY, translate);
 
@@ -60,6 +72,39 @@ public class Universe extends Group {
             double amount = (event.getDeltaY() < 0.0) ? 20f : -20f;
             setTranslateZ(getTranslateZ() + amount);
         });
+    }
+
+    public void addAmas(Amas a) {
+        Sphere s = new Sphere(0.6f);
+        s.setMaterial(new PhongMaterial(Color.RED));
+
+        Coordinate coord = a.getCoordinate(0);
+        s.setTranslateX(coord.getX());
+        s.setTranslateY(coord.getY());
+        s.setTranslateZ(coord.getZ());
+
+        elements.getChildren().add(s);
+    }
+
+    public void addGalaxy(Galaxy g) {
+        Sphere s = new Sphere(0.4f);
+        s.setMaterial(new PhongMaterial(Color.GREEN));
+
+        Coordinate coord = g.getCoordinate(0);
+        s.setTranslateX(coord.getX());
+        s.setTranslateY(coord.getY());
+        s.setTranslateZ(coord.getZ());
+
+        elements.getChildren().add(s);
+
+        s.setOnMouseClicked((e) -> {
+            galaxyInfos.setGalaxy(g);
+            galaxyInfos.setVisible(true);
+        });
+    }
+
+    public void clear() {
+        elements.getChildren().clear();
     }
 
 }
