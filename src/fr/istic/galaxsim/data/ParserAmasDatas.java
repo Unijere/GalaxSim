@@ -65,10 +65,10 @@ public class ParserAmasDatas extends ParserCosmosDatas{
 			return CheckData.isDouble(data);
 		}
 		
-		if (indice >= 121 && indice <= 125){
+		if (indice >= 127 && indice <= 131){
 			if (CheckData.isDouble(data)){
 				double d = Double.parseDouble(data);
-				return (d >= -189 && d <= 29883);
+				return (d >= -158 && d <= 29882);
 			}
 			return false;
 		}
@@ -100,7 +100,7 @@ public class ParserAmasDatas extends ParserCosmosDatas{
 				(indice >= 64 && indice <= 69) || 
 				(indice >= 71 && indice <= 78) || 
 				(indice >= 80 && indice <= 87) ||
-				(indice >= 121 && indice <= 125) || 
+				(indice >= 127 && indice <= 131) || 
 				(indice >= 160 && indice <= 168) );
 	}
 
@@ -143,7 +143,7 @@ public class ParserAmasDatas extends ParserCosmosDatas{
 			return 6;
 		}
 		
-		if (indice >= 121 && indice <= 125){
+		if (indice >= 127 && indice <= 131){
 			return 7;
 		}
 		
