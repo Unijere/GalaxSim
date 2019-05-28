@@ -1,5 +1,6 @@
 package fr.istic.galaxsim.gui;
 
+import fr.istic.galaxsim.calcul.Traitement;
 import fr.istic.galaxsim.data.*;
 import fr.istic.galaxsim.gui.form.BrowseField;
 import fr.istic.galaxsim.gui.form.BrowseFieldControl;
@@ -42,6 +43,8 @@ public class MainWindow {
     @FXML
 	private GalaxyInfos galaxyInfos;
 
+    private Universe universe;
+
     private BrowseFieldControl dataFileFieldControl;
 	private IntegerFieldControl distanceFieldControl;
 	private IntegerFieldControl massFieldControl;
@@ -60,15 +63,14 @@ public class MainWindow {
 
         // Ajout de controles sur les champs pour verifier la validite des donnees
 		dataFileFieldControl = new BrowseFieldControl(dataFileField, true);
-		distanceFieldControl = new IntegerFieldControl(distanceField, "distance", false);
-		distanceFieldControl.setLowerBound(0);
+		distanceFieldControl = new IntegerFieldControl(distanceField, "distance", false, 0, 100);
 
 		massFieldControl = new IntegerFieldControl(massField, "masse", false);
         massFieldControl.setLowerBound(0);
 
 		Group sceneRoot = new Group();
 
-		Universe universe = new Universe(pane3D);
+		universe = new Universe(pane3D, galaxyInfos);
 
 		AxesIndicator axes = new AxesIndicator(0.8f);
         //Translate t = new Translate(-50, 70, -80);
@@ -141,10 +143,16 @@ public class MainWindow {
                 });
 
 
+                // Reinitialisation des anciens filtres
+                Filter.removeAllFilter();
+
                 // Parametrage des filtres
                 Optional<Integer> distanceFilterValue = distanceFieldControl.getOptionalValue();
                 if(distanceFilterValue.isPresent()) {
                     Filter.setDistanceFilter(distanceFilterValue.get());
+                }
+                else {
+                    Filter.setDistanceFilter(100);
                 }
 
                 Optional<Integer> massFilterValue = massFieldControl.getOptionalValue();
@@ -174,6 +182,19 @@ public class MainWindow {
             }
         };
         parseDataTask.addEventHandler(WorkerStateEvent.WORKER_STATE_SUCCEEDED, taskEvent -> {
+            Traitement.calculCoordonnee();
+            Traitement.traitementAmas();
+            Traitement.traitementGalaxies();
+
+            universe.clear();
+            for(Galaxy g : DataBase.getAllGalaxies()) {
+                universe.addGalaxy(g);
+            }
+
+            for(Amas a : DataBase.getAllAmas()) {
+                universe.addAmas(a);
+            }
+
 			infoLabel.setText(String.format("Il y a %d amas et %d galaxies dans le fichier", DataBase.getNumberAmas(), DataBase.getNumberGalaxies()));
             progressBar.setManaged(false);
             progressBar.setVisible(false);

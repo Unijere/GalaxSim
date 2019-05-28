@@ -6,7 +6,7 @@ import java.util.ArrayList;
 public enum DataFileType {
 
     AMAS("amas et galaxies"),
-    GALAXIES("galaxies individuelels");
+    GALAXIES("galaxies individuelles");
 
     private String description;
 
