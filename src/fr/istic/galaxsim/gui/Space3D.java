@@ -3,6 +3,7 @@ package fr.istic.galaxsim.gui;
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
+import fr.istic.galaxsim.data.CosmosElement;
 import fr.istic.galaxsim.data.Galaxy;
 import javafx.geometry.Point3D;
 import javafx.scene.Group;
@@ -30,21 +31,21 @@ public class Space3D {
 		//space.setLayoutY(400);
 		
 	}
-	public void addGalaxy(Galaxy g){
+	public void addCosmosElement(CosmosElement ce){
 		Sphere s1 = new Sphere(10);
         Color c = Color.RED;
         s1.setMaterial(new PhongMaterial(c));
-        s1.setTranslateX(g.getCoordonnees().x);
-        s1.setTranslateY(g.getCoordonnees().y);
-        s1.setTranslateZ(g.getCoordonnees().z);
+        s1.setTranslateX(ce.getCoordinate(0).getX());
+        s1.setTranslateY(ce.getCoordinate(0).getY());
+        s1.setTranslateZ(ce.getCoordinate(0).getZ());
         
         space.getChildren().add(s1);
         
         
-        Path3D path = new Path3D(g.getCoordonnees().getPoint3D());
-        for(int j = 1;j < g.getNbCoordonnesFuture();j++) {
+        Path3D path = new Path3D(ce.getCoordinate(0).getPoint3D());
+        for(int j = 0;j < ce.getSizeCoordinate();j++) {
             Point3D p2;
-            p2 = g.getCoordonnees(j).getPoint3D();
+            p2 = ce.getCoordinate(j).getPoint3D();
             path.addTarget(p2);
         }
 

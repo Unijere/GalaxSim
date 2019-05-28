@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import fr.istic.galaxsim.gui.GalaxyInfos?>
+<?import fr.istic.galaxsim.gui.form.BrowseField?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ChoiceBox?>
@@ -8,10 +10,9 @@
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.control.Slider?>
-
 
 <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.istic.galaxsim.gui.MainWindow">
    <center>
@@ -27,19 +28,10 @@
                               <Insets bottom="3.0" />
                            </VBox.margin>
                         </Label>
-                        <HBox prefHeight="31.0" prefWidth="100.0">
-                           <children>
-                              <TextField fx:id="dataFileField" maxWidth="1.7976931348623157E308">
-                                 <HBox.margin>
-                                    <Insets right="5.0" />
-                                 </HBox.margin>
-                              </TextField>
-                              <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#openFileBrowser" text="Parcourir" />
-                           </children>
+                        <BrowseField fx:id="dataFileField">
                            <VBox.margin>
                               <Insets bottom="5.0" />
-                           </VBox.margin>
-                        </HBox>
+                           </VBox.margin></BrowseField>
                         <Label text="Type">
                            <VBox.margin>
                               <Insets bottom="3.0" />
@@ -55,17 +47,17 @@
                               <Insets bottom="3.0" />
                            </padding>
                         </Label>
-                        <TextField>
+                        <TextField fx:id="distanceField" styleClass="field">
                            <VBox.margin>
                               <Insets bottom="5.0" />
                            </VBox.margin>
                         </TextField>
-                        <Label text="Vélocité">
+                        <Label text="Masse (entière)">
                            <padding>
                               <Insets bottom="3.0" />
                            </padding>
                         </Label>
-                        <TextField />
+                        <TextField fx:id="massField" />
                      </children>
                      <padding>
                         <Insets left="7.0" right="7.0" />
@@ -92,7 +84,11 @@
                   <Insets />
                </opaqueInsets>
             </VBox>
-            <VBox fx:id="pane3D" prefHeight="200.0" prefWidth="100.0" />
+            <StackPane fx:id="pane3D" prefHeight="200.0" prefWidth="100.0">
+               <children>
+                  <GalaxyInfos fx:id="galaxyInfos" />
+               </children>
+            </StackPane>
         </items>
       </SplitPane>
    </center>

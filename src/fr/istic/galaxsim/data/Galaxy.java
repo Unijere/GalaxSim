@@ -1,144 +1,164 @@
 package fr.istic.galaxsim.data;
 
-import java.io.Serializable;
-import java.util.ArrayList;
+/**
+ * classe permettant de définir une galaxie
+ * @author anaofind
+ *
+ */
+public class Galaxy extends CosmosElement{
 
-import fr.istic.galaxsim.serialization.*;
+	/**
+	 * l'identifiant de l'amas de la galaxie
+	 */
+	private int amasIdent;
+	
+	/**
+	 * le nom de la galaxie
+	 */
+	private String name;
+	
+	/**
+	 * le type de la galaxie
+	 */
+	private String type;
+	
+	/**
+	 * la masse de l'amas associé
+	 */
+	private double amasMass;
+	
+	/**
+	 * constructeur
+	 * @param ident l'identifiant
+	 * @param distance la distance
+	 * @param velocity la vitesse
+	 * @param amasMass la masse de l'amas associé
+	 */
+	public Galaxy(int ident, double distance, double velocity, String type, double amasMass) {
+		super(ident, distance, velocity);
+		this.type = type;
+		this.amasMass = amasMass;
+	}
 
-public class Galaxy implements Serializable{
-	
-	
-	private static final long serialVersionUID = -2780014384183101128L;
-	
-	private String name = "default";
-	private Coordonnees currentCoordonnes;
-	private ArrayList<Coordonnees> coordonneesFuture = new ArrayList<Coordonnees>();
-	private ArrayList<Coordonnees> coordonneesPasse = new ArrayList<Coordonnees>();
+	/**
+	 * getter identifiant de l'amas
+	 * @return l'identifiant de l'amas
+	 */
+	public int getAmasIdent() {
+		return amasIdent;
+	}
 
-	private Vitesse currentVitesse;
-	private ArrayList<Vitesse> vitesseFuture = new ArrayList<Vitesse>();
-	private ArrayList<Vitesse> vitessePasse = new ArrayList<Vitesse>();
-	
-	public Galaxy (String name){
+	/**
+	 * setter identifiant de l'amas
+	 * @param l'identifiant de l'amas
+	 */
+	public void setAmasIdent(int amasIdent) {
+		this.amasIdent = amasIdent;
+	}
+
+	/**
+	 * getter nom
+	 * @return le nom de la galaxie
+	 */
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * setter nom
+	 * @param name le nom de la galaxie
+	 */
+	public void setName(String name) {
 		this.name = name;
 	}
-	
-	public void addFuturCoordonnee(Coordonnees c){
-		this.coordonneesFuture.add(c);
-	}
-	
-	public void addPastCoordonnee(Coordonnees c){
-		this.coordonneesPasse.add(c);
-	}
-	
-	
-	public void setCurrentCoordonnees(Coordonnees c){
-		this.currentCoordonnes = c;
-	}
-	
-	public Coordonnees getCoordonnees(){
-		return this.currentCoordonnes;
-	}
-	
-	public Coordonnees getCoordonnees(int time){
-		return (time<0?
-					this.coordonneesPasse.get(-time-1):
-				time> 0 ? 
-					this.coordonneesFuture.get(time-1): 
-				this.currentCoordonnes);
-	}
-	
-	
-	private void setCurrentVitesse(Vitesse vitesse) {
-		this.currentVitesse = vitesse;
-		
-	}
-	
-	public Vitesse getVitesse(){
-		return this.currentVitesse;
-	}
-	
-	public Vitesse getVitesse(int time){
-		return (time<0?
-					this.vitessePasse.get(-time-1):
-				time> 0 ? 
-					this.vitesseFuture.get(time-1): 
-				this.currentVitesse);
-	}
-	
-	
-	
-	
-	
-	
-	
-	public void serialize() {
-		Serialization.serialize(this, "data/"+this.name);
-		System.out.println("finished : "+this.name);
-	}
-	
-	public static Galaxy deserialize(String name){
-		try{
-			return (Galaxy) Serialization.deserialize("data/"+name);
-		}catch(Exception e){
-			e.printStackTrace();
-			return null;
-		}
-	}
-	
-	
-	public static void main(String[] args){
-		
-		/*
-		 * Test pour création de galaxies avec vitesses
-		 * 
-		 */
-		Galaxy g1 = new Galaxy("g1");
-		g1.setCurrentCoordonnees(new Coordonnees(5, 6, 2));
-		g1.setCurrentVitesse( new Vitesse (1,3,-2));
-		for(int i=1;i<200;i++){
-			g1.addFuturCoordonnee(new Coordonnees(
-					(g1.getCoordonnees(i-1).x+g1.getVitesse().x) ,
-					(g1.getCoordonnees(i-1).y+g1.getVitesse().y) ,
-					(g1.getCoordonnees(i-1).z+g1.getVitesse().z)		));
-		}
-		
-		
-		
-		Galaxy g2 = new Galaxy("g2");
-		g2.setCurrentCoordonnees(new Coordonnees(25, 12, 2));
-		g2.setCurrentVitesse( new Vitesse (8,-25,-5));
-		for(int i=1;i<200;i++){
-			g2.addFuturCoordonnee(new Coordonnees(
-					(g2.getCoordonnees(i-1).x+g2.getVitesse().x) ,
-					(g2.getCoordonnees(i-1).y+g2.getVitesse().y) ,
-					(g2.getCoordonnees(i-1).z+g2.getVitesse().z)		));
-		}
-		
-		Galaxy g3 = new Galaxy("g3");
-		g3.setCurrentCoordonnees(new Coordonnees(5, -7, 11));
-		g3.setCurrentVitesse( new Vitesse (-3,3,2));
-		for(int i=1;i<200;i++){
-			g3.addFuturCoordonnee(new Coordonnees(
-					(g3.getCoordonnees(i-1).x+g3.getVitesse().x) ,
-					(g3.getCoordonnees(i-1).y+g3.getVitesse().y) ,
-					(g3.getCoordonnees(i-1).z+g3.getVitesse().z)		));
-		}
-		
-		
-		g1.serialize();
-		g2.serialize();
-		g3.serialize();
+
+	/**
+	 * getter type
+	 * @return le type de la galaxie
+	 */
+	public String getType() {
+		return type;
 	}
 
-	public int getNbCoordonnesFuture() {
-		
-		return this.coordonneesFuture.size();
+	/**
+	 * getter amasMass
+	 * @return amasMass
+	 */
+	public double getAmasMass() {
+		return amasMass;
 	}
 
+	/**
+	 * methode permettant de creer une galaxy à partir d'un taleau de données
+	 * @param datas le tableau de donnéees
+	 * @return la nouvelle galaxy
+	 */
+	public static Galaxy create(String[] datas){
+		if (datas.length == 11){
+			String stringId = datas[0];
+			String name = datas[1];
+			String type = datas[2];
+			String stringIdAmas = datas[3];
+			String stringDist = datas[4];
+			String stringGLon = datas[5];
+			String stringGLat = datas[6];
+			String stringSGLon = datas[7];
+			String stringSGLat = datas[8];
+			String stringVelo = datas[9];
+			String stringMassAmas = datas[10];
+			
+			int id = -1;
+			double dist = -1;
+			double velo = -1;
+			int idAmas = -1;
+			double massAmas = 0;
+			
+			if (stringId != null) {
+				id = Integer.parseInt(stringId);
+			}
+			if (stringDist != null){
+				dist = Double.parseDouble(stringDist);
+			}
+			if (stringVelo != null){
+				velo = Double.parseDouble(stringVelo);
+			}
+			if (stringIdAmas != null){
+				idAmas = Integer.parseInt(stringIdAmas);
+			}
+			if (stringMassAmas != null){
+				massAmas = Double.parseDouble(stringMassAmas);
+			}
+			
+			Galaxy newGalaxy = new Galaxy(id, dist, velo, type, massAmas);
+			
+			newGalaxy.setName(name);
+			newGalaxy.setAmasIdent(idAmas);
+			
+			if (stringGLon != null && stringGLat != null){
+				double GLon = Double.parseDouble(stringGLon);
+				double GLat = Double.parseDouble(stringGLat);
+				newGalaxy.setGalacticLongLat(GLon, GLat);
+			}
+			
+			if (stringSGLon != null && stringSGLat != null){
+				double SGLon = Double.parseDouble(stringSGLon);
+				double SGLat = Double.parseDouble(stringSGLat);
+				newGalaxy.setSuperGalacticLongLat(SGLon, SGLat);
+			}
+			
+			return newGalaxy;
+		}
+		
+		return null;
+	}
+	
+	/**
+	 * methode toString
+	 */
 	public String toString(){
-		return "galaxie "+this.name+" ";
+		return super.toString() + " | name: " + name + " | " + 
+				"type: " + type + " | " + 
+				"amasIdent: " + amasIdent + " | " + 
+				"amasMass: " + amasMass;
 	}
-	
-	
 }
