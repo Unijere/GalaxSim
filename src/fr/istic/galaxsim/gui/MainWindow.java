@@ -143,6 +143,9 @@ public class MainWindow {
                 });
 
 
+                // Reinitialisation des anciens filtres
+                Filter.removeAllFilter();
+
                 // Parametrage des filtres
                 Optional<Integer> distanceFilterValue = distanceFieldControl.getOptionalValue();
                 if(distanceFilterValue.isPresent()) {
