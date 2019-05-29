@@ -59,17 +59,23 @@ public abstract class CosmosElement{
 	 */
 	private double superGalacticLat = 0;
 	
+	/**
+	 * l'écart d'incertitude
+	 */
+	private double deviationUncertainty;
 	
 	/**
 	 * constructeur 
 	 * @param ident l'identifiant
 	 * @param distance la distance
 	 * @param velocity la vitesse
+	 * @param deviationUncertainty l'écart d'incertitude
 	 */
-	public CosmosElement(int ident, double distance, double velocity){
+	public CosmosElement(int ident, double distance, double velocity, double deviationUncertainty){
 		this.ident = ident;
 		this.distance = distance;
-		this.velocity = velocity;		
+		this.velocity = velocity;
+		this.deviationUncertainty = deviationUncertainty;
 	}
 	
 	/**
@@ -215,11 +221,20 @@ public abstract class CosmosElement{
 	}
 	
 	/**
+	 * getter deviationUncertainty
+	 * @return deviationUncertainty
+	 */
+	public double getDeviationUncertainty() {
+		return deviationUncertainty;
+	}
+
+	/**
 	 * methode toString
 	 */
 	public String toString(){
 		return ident + " -> disttance: " + distance + " | vitesse: " + velocity + " | " +
 				"longLatG: (" + galacticLon + "," + galacticLat + ")" + " | " + 
-				"longLatSG: (" + superGalacticLon + "," + superGalacticLat + ")";
+				"longLatSG: (" + superGalacticLon + "," + superGalacticLat + ")" + 
+				" | insertitude: " + deviationUncertainty;
 	}
 }
