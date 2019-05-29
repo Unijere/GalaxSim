@@ -29,6 +29,11 @@ public class Filter {
 	private static boolean filterCoordinateActived = false;
 	
 	/**
+	 * boolean indiquant si le filtre de marge d'erreur est activé ou pas
+	 */
+	private static boolean filterDeviationUncertaintyActived = false;
+	
+	/**
 	 * filtre de distance
 	 */
 	private static double distance = -1;
@@ -44,6 +49,11 @@ public class Filter {
 	private static double mass = -1;
 	
 	/**
+	 * filtre de marge d'erreur
+	 */
+	private static double deviationUncertainty = -1;
+	
+	/**
 	 * filtres de coordonnée
 	 */
 	private static double x1 = -1, x2 = -1, y1 = -1, y2 = -1, z1 = -1, z2 = -1;
@@ -53,14 +63,13 @@ public class Filter {
 	 */
 	private static int t = -1;
 	
-	
 	/**
 	 * méthode permettant de savoir si un amas correspond bien au filtres
 	 * @param a l'amas
 	 * @return boolean
 	 */
 	public static boolean goodAmas(Amas a){
-		return (goodDistance(a) && goodVelocity(a) && goodMassAmas(a) && goodCoordinate(a));
+		return (goodDistance(a) && goodVelocity(a) && goodMassAmas(a) && goodDeviationUncertainty(a) && goodCoordinate(a));
 	}
 	
 	/**
@@ -69,7 +78,7 @@ public class Filter {
 	 * @return boolean
 	 */
 	public static boolean goodGalaxies(Galaxy g){
-		return (goodDistance(g) && goodVelocity(g) && goodCoordinate(g));
+		return (goodDistance(g) && goodVelocity(g) && goodDeviationUncertainty(g) && goodCoordinate(g));
 	}
 	
 	/**
@@ -97,6 +106,15 @@ public class Filter {
 	public static void setMassFilter(double m){
 		mass = m;
 		filterMassActived = true;
+	}
+	
+	/**
+	 * méthode permettant de changer le filtre de marge d'erreur
+	 * @param m la marge d'erreur max
+	 */
+	public static void setDeviationUncertaintyFilter(double du){
+		deviationUncertainty = du;
+		filterDeviationUncertaintyActived = true;
 	}
 	
 	/**
@@ -132,13 +150,13 @@ public class Filter {
 		filterDistanceActived = false;
 		filterVelocityActived = false;
 		filterMassActived = false;
+		filterDeviationUncertaintyActived = false;
 		filterCoordinateActived = false;
 	}
 	
 	/**
 	 * methode permettant de savoir si un objet se situe à un distance inférieure ou égale à celle indiquée en paramètre
 	 * @param cosmosElement l'objet
-	 * @param distance la distance
 	 * @return boolean
 	 */
 	private static boolean goodDistance(CosmosElement cosmosElement) {
@@ -151,7 +169,6 @@ public class Filter {
 	/**
 	 * methode permettant de savoir si un objet a une vitesse inférieure ou égale à celle indiquée en paramètre
 	 * @param cosmosElement l'objet
-	 * @param velocity la vitesse
 	 * @return boolean
 	 */
 	private static boolean goodVelocity(CosmosElement cosmosElement) {
@@ -164,7 +181,6 @@ public class Filter {
 	/**
 	 * methode permettant de savoir si un amas a une masse inférieure ou égale à celle indiquée en paramètre
 	 * @param amas l'amas
-	 * @param mass la masse
 	 * @return boolean
 	 */
 	private static boolean goodMassAmas(Amas amas) {
@@ -175,9 +191,20 @@ public class Filter {
 	}
 	
 	/**
+	 * methode permettant de savoir si un objet à une marge d'erreur accéptable
+	 * @param cosmosElement l'objet
+	 * @return boolean
+	 */
+	private static boolean goodDeviationUncertainty(CosmosElement cosmosElement) {
+		if (cosmosElement.getDeviationUncertainty() <= deviationUncertainty) {
+			return true;
+		}
+		return !filterDeviationUncertaintyActived;
+	}
+	
+	/**
 	 * methode permettant de savoir si un objet se trouve dans les intervalles de coordonées [x1,x2], [y1,y2], [z1,z2] à un moment t
 	 * @param cosmosElement l'objet
-	 * @param position en x1, x2, y1, y2, z1, z2, et le moment t de l'action
 	 * @return boolean
 	 */
 	private static boolean goodCoordinate(CosmosElement cosmosElement) {

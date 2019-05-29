@@ -232,9 +232,9 @@ public abstract class CosmosElement{
 	 * methode toString
 	 */
 	public String toString(){
-		return ident + " -> disttance: " + distance + " | vitesse: " + velocity + " | " +
+		return ident + " -> distance: " + distance + " | vitesse: " + velocity + " | " +
 				"longLatG: (" + galacticLon + "," + galacticLat + ")" + " | " + 
 				"longLatSG: (" + superGalacticLon + "," + superGalacticLat + ")" + 
-				" | insertitude: " + deviationUncertainty;
+				" | incertitude: " + deviationUncertainty;
 	}
 }
