@@ -2,6 +2,7 @@ package fr.istic.galaxsim.gui;
 
 import fr.istic.galaxsim.data.Amas;
 import fr.istic.galaxsim.data.Coordinate;
+import fr.istic.galaxsim.data.CosmosElement;
 import fr.istic.galaxsim.data.Galaxy;
 import javafx.scene.Group;
 import javafx.scene.Node;
@@ -17,7 +18,11 @@ import javafx.scene.transform.Translate;
 
 public class Universe extends Group {
 
-    private final GalaxyInfos galaxyInfos;
+    private final static PhongMaterial amasMaterial = new PhongMaterial(Color.GREEN);
+    private final static PhongMaterial galaxyMaterial = new PhongMaterial(Color.RED);
+    private final static PhongMaterial selectedElementMaterial = new PhongMaterial(Color.BLUE);
+
+    private final CosmosElementInfos cosmosElementInfos;
 
     private Group elements = new Group();
 
@@ -28,10 +33,13 @@ public class Universe extends Group {
     private double lastMouseClickPosX;
     private double lastMouseClickPosY;
 
-    public Universe(Node parentContainer, GalaxyInfos galaxyInfos) {
-        this.galaxyInfos = galaxyInfos;
+    private Sphere lastSelectedSphere = null;
+    private boolean isLastSelectedGalaxy = false;
 
-        Box box = new Box(50, 50, 50);
+    public Universe(Node parentContainer, CosmosElementInfos cosmosElementInfos) {
+        this.cosmosElementInfos = cosmosElementInfos;
+
+        Box box = new Box(200, 200, 200);
         box.setDrawMode(DrawMode.LINE);
         getChildren().addAll(box, elements);
 
@@ -75,22 +83,23 @@ public class Universe extends Group {
     }
 
     public void addAmas(Amas a) {
-        Sphere s = new Sphere(0.6f);
-        s.setMaterial(new PhongMaterial(Color.RED));
-
-        Coordinate coord = a.getCoordinate(0);
-        s.setTranslateX(coord.getX());
-        s.setTranslateY(coord.getY());
-        s.setTranslateZ(coord.getZ());
-
-        elements.getChildren().add(s);
+        Sphere s = createCosmosElementSphere(0.6f, a);
+        s.setMaterial(amasMaterial);
     }
 
     public void addGalaxy(Galaxy g) {
-        Sphere s = new Sphere(0.4f);
-        s.setMaterial(new PhongMaterial(Color.GREEN));
+        Sphere s = createCosmosElementSphere(0.4f, g);
+        s.setMaterial(galaxyMaterial);
+    }
 
-        Coordinate coord = g.getCoordinate(0);
+    public void clear() {
+        elements.getChildren().clear();
+    }
+
+    private Sphere createCosmosElementSphere(double radius, CosmosElement cosmosElement) {
+        Sphere s = new Sphere(radius);
+
+        Coordinate coord = cosmosElement.getCoordinate(0);
         s.setTranslateX(coord.getX());
         s.setTranslateY(coord.getY());
         s.setTranslateZ(coord.getZ());
@@ -98,13 +107,33 @@ public class Universe extends Group {
         elements.getChildren().add(s);
 
         s.setOnMouseClicked((e) -> {
-            galaxyInfos.setGalaxy(g);
-            galaxyInfos.setVisible(true);
-        });
-    }
+            if(lastSelectedSphere != null) {
+                // Reinitialisation de la couleur par default de la sphere
+                // dernierement selectionnee
+                if(isLastSelectedGalaxy) {
+                    lastSelectedSphere.setMaterial(galaxyMaterial);
+                }
+                else {
+                    lastSelectedSphere.setMaterial(amasMaterial);
+                }
+            }
 
-    public void clear() {
-        elements.getChildren().clear();
+            // La sphere selectionne possede la couleur bleue
+            s.setMaterial(selectedElementMaterial);
+            if(cosmosElement instanceof Galaxy) {
+                cosmosElementInfos.setGalaxy((Galaxy) cosmosElement);
+                isLastSelectedGalaxy = true;
+            }
+            else {
+                cosmosElementInfos.setAmas((Amas) cosmosElement);
+                isLastSelectedGalaxy = false;
+            }
+
+            cosmosElementInfos.setVisible(true);
+            lastSelectedSphere = s;
+        });
+
+        return s;
     }
 
 }
