@@ -33,12 +33,6 @@ public class DataExtractionTask extends Task<DataFileType> {
         this.massFieldControl = massFieldControl;
 
         progressProperty = new SimpleDoubleProperty();
-
-        parser.getBytesReadProperty().addListener((observableValue, oldValue, newValue) -> {
-                double value = (int) newValue;
-                double progress = value / (double) parser.getFileLength();
-                progressProperty.set(progress);
-        });
     }
 
     @Override
@@ -55,6 +49,12 @@ public class DataExtractionTask extends Task<DataFileType> {
                 cancel(true);
                 return null;
         }
+
+        parser.getBytesReadProperty().addListener((observableValue, oldValue, newValue) -> {
+            double value = (int) newValue;
+            double progress = value / (double) parser.getFileLength();
+            progressProperty.setValue(progress);
+        });
 
         // Reinitialisation des anciens filtres
         Filter.removeAllFilter();

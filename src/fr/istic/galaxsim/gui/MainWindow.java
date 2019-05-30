@@ -39,7 +39,7 @@ public class MainWindow {
     @FXML
     private TextField massField;
     @FXML
-    private GalaxyInfos galaxyInfos;
+    private CosmosElementInfos cosmosElementInfos;
 
     private Universe universe;
 
@@ -63,14 +63,15 @@ public class MainWindow {
 
         // Ajout de controles sur les champs pour verifier la validite des donnees
         dataFileFieldControl = new BrowseFieldControl(dataFileField, true);
-        distanceFieldControl = new IntegerFieldControl(distanceField, "distance", false, 0, 100);
+        distanceFieldControl = new IntegerFieldControl(distanceField, "distance", false, 0, 101);
 
         massFieldControl = new IntegerFieldControl(massField, "masse", false);
         massFieldControl.setLowerBound(0);
 
         Group sceneRoot = new Group();
 
-        universe = new Universe(pane3D, galaxyInfos);
+        universe = new Universe(pane3D, cosmosElementInfos);
+        universe.setTranslateZ(450);
 
         AxesIndicator axes = new AxesIndicator(0.8f);
         //Translate t = new Translate(-50, 70, -80);
@@ -97,16 +98,16 @@ public class MainWindow {
         pane3D.getChildren().addAll(simScene);
 
         // Positionnement du panneau en bas a droite de la fenetre
-        galaxyInfos.widthProperty().addListener((obs, oldValue, newValue) -> {
-            galaxyInfos.setTranslateX((pane3D.getWidth() - galaxyInfos.getWidth()) / 2 - 7);
+        cosmosElementInfos.widthProperty().addListener((obs, oldValue, newValue) -> {
+            cosmosElementInfos.setTranslateX((pane3D.getWidth() - cosmosElementInfos.getWidth()) / 2 - 7);
         });
-        galaxyInfos.heightProperty().addListener((obs, oldValue, newValue) -> {
-            galaxyInfos.setTranslateY((pane3D.getHeight() - galaxyInfos.getHeight()) / 2 - 7);
+        cosmosElementInfos.heightProperty().addListener((obs, oldValue, newValue) -> {
+            cosmosElementInfos.setTranslateY((pane3D.getHeight() - cosmosElementInfos.getHeight()) / 2 - 7);
         });
 
         // La fenetre doit etre affichee au premier plan
-        galaxyInfos.setViewOrder(-1.0);
-        galaxyInfos.setVisible(false);
+        cosmosElementInfos.setViewOrder(-1.0);
+        cosmosElementInfos.setVisible(false);
     }
 
     @FXML
@@ -125,7 +126,7 @@ public class MainWindow {
 
         // Mise en relation de l'avancement de l'extraction des donnees avec
         // la barre de chargement
-        parserDataTask.progressProperty.bind(progressBar.progressProperty());
+        parserDataTask.progressProperty.bindBidirectional(progressBar.progressProperty());
 
         parserDataTask.addEventHandler(WorkerStateEvent.WORKER_STATE_SUCCEEDED, taskEvent -> {
             Platform.runLater(() -> {
