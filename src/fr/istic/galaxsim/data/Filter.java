@@ -184,7 +184,7 @@ public class Filter {
 	 * @return boolean
 	 */
 	private static boolean goodMassAmas(Amas amas) {
-		if (amas.getMass() <= mass) {
+		if (amas.getMass() >= mass) {
 			return true;
 		}
 		return !filterMassActived;
